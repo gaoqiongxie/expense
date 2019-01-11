@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.xw</groupId>
 	<artifactId>Expense</artifactId>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>HelloWorld Maven Webapp</name>
 	<url>http://maven.apache.org</url>
@@ -95,5 +95,12 @@
                 <filtering>false</filtering>
             </resource>
         </resources>
+        
+	    <plugins>   
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
 	</build>
 </project>
