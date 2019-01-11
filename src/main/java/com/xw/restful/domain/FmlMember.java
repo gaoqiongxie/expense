@@ -20,5 +20,4 @@ public class FmlMember {
 	public void setName(String name) {
 		this.name = name;
 	}
-
 }
