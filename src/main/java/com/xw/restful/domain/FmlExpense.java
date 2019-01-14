@@ -1,30 +1,32 @@
 package com.xw.restful.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class FmlExpense {
+public class FmlExpense implements Serializable{
 
-	int id;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-	int memberId;
+	private int expenseId;
 
-	float expense;
+	private int memberId;
+	
+	private int payerId;
 
-	String expenseDesc;
+	private float expense;
+	
+	private String expenseType;
 
-	Date expenseTime;
+	private String expenseDesc;
 
-	String dataState;
+	private Date expenseTime;
 
-	Date updateTime;
+	private String dataState;
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
+	private Date updateTime;
 
 	public int getMemberId() {
 		return memberId;
@@ -73,4 +75,29 @@ public class FmlExpense {
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
 	}
+
+	public int getExpenseId() {
+		return expenseId;
+	}
+
+	public void setExpenseId(int expenseId) {
+		this.expenseId = expenseId;
+	}
+
+	public int getPayerId() {
+		return payerId;
+	}
+
+	public void setPayerId(int payerId) {
+		this.payerId = payerId;
+	}
+
+	public String getExpenseType() {
+		return expenseType;
+	}
+
+	public void setExpenseType(String expenseType) {
+		this.expenseType = expenseType;
+	}
+
 }

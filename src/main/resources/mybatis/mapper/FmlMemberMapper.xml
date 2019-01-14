@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.xw.restful.dao.FmlMemberDao">
 	<resultMap type="com.xw.restful.domain.FmlMember" id="fmlMember">
-		<id column="id" property="id" jdbcType="INTEGER" />
+		<id column="id" property="memberId" jdbcType="INTEGER" />
 		<result column="name" property="name" jdbcType="VARCHAR" />
 	</resultMap>
 	

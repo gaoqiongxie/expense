@@ -1,17 +1,15 @@
 package com.xw.restful.domain;
 
-public class FmlMember {
+import java.io.Serializable;
 
-	private int id;
+public class FmlMember implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private int memberId;
 	private String name;
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
 
 	public String getName() {
 		return name;
@@ -19,5 +17,13 @@ public class FmlMember {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public int getMemberId() {
+		return memberId;
+	}
+
+	public void setMemberId(int memberId) {
+		this.memberId = memberId;
 	}
 }

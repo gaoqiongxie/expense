@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>hello</title>
+<link rel="stylesheet" type="text/css" href="../scripts/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="../scripts/easyui/themes/icon.css">
+
+<script type="text/javascript" src="../scripts/easyui/jquery.min.js"></script>
+<script type="text/javascript" src="../scripts/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../scripts/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../scripts/common.js"></script>
+<!-- <script type="text/javascript" src="../scripts/jquery-3.3.1.min.js"></script> -->
+<script type="text/javascript" src="js/expense.js"></script>
+
+</head>
+<body>
+		<div>
+		<div id="expensetb">
+		   		<form id="" method="post">
+			    	<table>
+			    		<tr>
+			    			<td>
+			   				    <a href="javascript:void(0)" class="easyui-linkbutton" name="compareButton" data-key="expenseList" data-title="支出报告" iconCls="icon-search">对比选中数据</a>
+			    				<a href="javascript:void(0)" class="easyui-linkbutton" name="expButton" data-key="expenseList" data-options="iconCls:'icon-detail'" >导出Excel文件</a>
+			    				</td>
+			    		</tr>
+			    	</table>
+		    	</form>
+		    	<table>
+		    		<tr>
+		    			<td>
+		    				<a href="#" class="easyui-linkbutton" id="addButton" data-options="iconCls:'icon-add',plain:true" >新增</a>
+							<a href="#" class="easyui-linkbutton" id="editButton" data-options="iconCls:'icon-edit',plain:true" >修改</a>
+							<a href="#" class="easyui-linkbutton" id="delButton" data-options="iconCls:'icon-cancel',plain:true" >删除</a>
+							<a href="#" class="easyui-linkbutton" id="impButton" data-options="iconCls:'icon-import',plain:true" >导入</a>
+		    			</td>
+		    			<td>支出人： <select id="sExpense" type="sExpense" style="width:100px;" class="easyui-combobox"></select></td>
+		    			<td>支付人：<select id="sPayer" type="sPayer" style="width:100px;" class="easyui-combobox"></select></td>
+		    			<td>支出类型：<select id="sType" type="sType" style="width:100px;" class="easyui-combobox"></select></td>
+		    			支出时间：<input id="startTime" name="startTime" type="text" class="easyui-datebox"/> 
+							至：<input id="endTime" name="endTime" type="text" class="easyui-datebox" />
+		    			<td> <a href="#" class="easyui-linkbutton" id="searchButton" iconCls="icon-search">查询</a>
+		    			</td>
+		    		</tr>
+		    	</table>
+			</div>
+			
+			<table id="expenseList"></table>
+		</div>
+		
+		<div id="expenseDlg" class="easyui-dialog"  style="padding:10px;">
+		<form id="expenseForm" method="post">
+			<table class="fromTable">
+				<tr>
+					<td align="right" width="15%">支出人：</td>
+					<td align="left" width="30%">
+						<select id="eExpense" name="eExpense" style="width:100px;" class="easyui-combobox"></select>
+					</td>
+					<td colspan="2"></td>
+				</tr>
+				<tr>
+					<td align="right" width="25%">支付人：</td>
+					<td align="left" width="30%">
+						<select id="ePayer" name="ePayer" style="width:100px;" class="easyui-combobox"></select>
+					</td>
+					<td align="right" width="25%">支付类型：</td>
+					<td align="left" width="30%">
+						<select id="eType" name="eType" style="width:100px;" class="easyui-combobox"></select>
+					</td>
+				</tr>
+				<tr>
+					<td align="right" width="25%">支出金额：</td>
+					<td align="left" width="30%">
+						<input id="expense" name="expense" data-options="required:true,precision:2,min:0,max:500" class="easyui-numberbox"/>
+					</td>
+					<td colspan="2"></td>
+				</tr>
+				<tr>
+					<td align="right" width="15%">支出时间：</td>
+					<td align="left" width="30%">
+						<input id="expenseTime" name="expenseTime" class="easyui-datebox" type="text"/>
+					</td><td colspan="2"></td>
+				</tr>
+				<tr>
+					<td align="right" width="15%">备注：</td>
+					<td align="left" width="30%">
+						<input id="expenseDesc" name="expenseDesc" class="ipt_text" type="text"/>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>   
+</body>
+</html>
