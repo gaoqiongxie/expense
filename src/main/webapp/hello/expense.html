@@ -56,6 +56,8 @@
 					<td align="right" width="15%">支出人：</td>
 					<td align="left" width="30%">
 						<select id="eExpense" name="eExpense" style="width:100px;" class="easyui-combobox"></select>
+						<input type="hidden" id="expenseId" name="expenseId"/>
+						<input type="hidden" id="recordId" name="recordId"/>
 					</td>
 					<td colspan="2"></td>
 				</tr>
@@ -63,16 +65,18 @@
 					<td align="right" width="25%">支付人：</td>
 					<td align="left" width="30%">
 						<select id="ePayer" name="ePayer" style="width:100px;" class="easyui-combobox"></select>
+						<input type="hidden" id="payerId" name="payerId"/>
 					</td>
 					<td align="right" width="25%">支付类型：</td>
 					<td align="left" width="30%">
 						<select id="eType" name="eType" style="width:100px;" class="easyui-combobox"></select>
+						<input type="hidden" id="expenseType" name="expenseType"/>
 					</td>
 				</tr>
 				<tr>
 					<td align="right" width="25%">支出金额：</td>
 					<td align="left" width="30%">
-						<input id="expense" name="expense" data-options="required:true,precision:2,min:0,max:500" class="easyui-numberbox"/>
+						<input id="expense" name="expense" data-options="required:true,precision:2" class="easyui-numberbox"/>
 					</td>
 					<td colspan="2"></td>
 				</tr>

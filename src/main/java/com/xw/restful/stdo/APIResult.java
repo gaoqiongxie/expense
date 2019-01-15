@@ -54,6 +54,7 @@ public class APIResult implements Serializable {
 	        super();
 	        this.status = StatusEnum.SUCCESS.getValue();
 	        this.data = data;
+	        this.msg = StatusEnum.SUCCESS.getLabel();
 	    }
 
 	    public APIResult(String errorCode, String msg) {

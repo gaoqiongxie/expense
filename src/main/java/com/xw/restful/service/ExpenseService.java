@@ -21,4 +21,6 @@ public interface ExpenseService {
 
 	ExpenseVO getDtoRecordById(String id);
 
+	int addOrUpdateExpense(APIRequest apiRequest);
+
 }

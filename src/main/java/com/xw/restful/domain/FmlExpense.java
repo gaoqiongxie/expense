@@ -10,9 +10,9 @@ public class FmlExpense implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private int expenseId;
+	private int recordId;
 
-	private int memberId;
+	private int expenseId;
 	
 	private int payerId;
 
@@ -28,13 +28,6 @@ public class FmlExpense implements Serializable{
 
 	private Date updateTime;
 
-	public int getMemberId() {
-		return memberId;
-	}
-
-	public void setMemberId(int memberId) {
-		this.memberId = memberId;
-	}
 
 	public float getExpense() {
 		return expense;
@@ -98,6 +91,14 @@ public class FmlExpense implements Serializable{
 
 	public void setExpenseType(String expenseType) {
 		this.expenseType = expenseType;
+	}
+
+	public int getRecordId() {
+		return recordId;
+	}
+
+	public void setRecordId(int recordId) {
+		this.recordId = recordId;
 	}
 
 }

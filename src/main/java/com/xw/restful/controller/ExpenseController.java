@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.xw.restful.base.BaseController;
@@ -31,6 +32,11 @@ public class ExpenseController extends BaseController{
 		return new APIResult(expenseService.getFmlExpenses(this.apiRequest));
 	}
 	
+	@RequestMapping("/expense")
+	public APIResult expense() {
+		initParams();
+		return new APIResult(expenseService.addOrUpdateExpense(this.apiRequest));
+	}
 
 	@RequestMapping("/types")
 	public APIResult types() {
@@ -38,7 +44,7 @@ public class ExpenseController extends BaseController{
 		return new APIResult(expenseTypes);
 	}
 	
-	@RequestMapping("/getDtoRecordById/{id}")
+	@RequestMapping(value="/expense/{id}", method=RequestMethod.GET)
 	public APIResult getDtoRecordById(@PathVariable("id") String id) {
 		ExpenseVO expenseVO = expenseService.getDtoRecordById(id);
 		return new APIResult(expenseVO);

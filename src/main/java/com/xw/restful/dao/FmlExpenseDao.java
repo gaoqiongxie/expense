@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.xw.restful.domain.ExpenseType;
+import com.xw.restful.domain.FmlExpense;
 import com.xw.restful.domain.vo.ExpenseVO;
 
 public interface FmlExpenseDao {
@@ -13,5 +14,13 @@ public interface FmlExpenseDao {
 	List<ExpenseType> ExpenseTypes();
 
 	ExpenseVO getDtoRecordById(String id);
+
+	int update(FmlExpense expense);
+
+	int insert(FmlExpense expense);
+
+	int countExpenses(Map<String, Object> paMap);
+
+	int updateDataStateTodel(List<Integer> ids);
 
 }

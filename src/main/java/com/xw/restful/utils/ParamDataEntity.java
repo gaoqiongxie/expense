@@ -8,8 +8,8 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.mockito.internal.util.StringUtil;
 
+import com.alibaba.fastjson.JSON;
 import com.xw.restful.constant.ErrorCodeEnum;
 import com.xw.restful.exceptions.BizException;
 import com.xw.restful.stdo.APIRequest;
@@ -360,6 +360,10 @@ public class ParamDataEntity {
 		catch (Exception ex){
 			return dtDefault;
 		}
+	}
+	
+	public <T> T getObject(Class<T> type){
+	    return  (T) JSON.parseObject(this.paramData, type);
 	}
 	
 }

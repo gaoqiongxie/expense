@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
  <mapper namespace="com.xw.restful.dao.FmlExpenseDao">
  	<resultMap type="com.xw.restful.domain.FmlExpense" id="fmlExpense">
-		<id column="id" property="expenseId" jdbcType="INTEGER" />
-		<result column="member_id" property="memberId" jdbcType="INTEGER" />
+		<id column="id" property="recordId" jdbcType="INTEGER" />
+		<result column="member_id" property="expenseId" jdbcType="INTEGER" />
 		<result column="payer_id" property="payerId" jdbcType="INTEGER" />
 		<result column="expense" property="expense" jdbcType="FLOAT" />
 		<result column="expense_type" property="expenseType" jdbcType="INTEGER" />
@@ -28,17 +28,76 @@
 		<result column="expense_desc" property="expenseDesc" jdbcType="VARCHAR" />
 		<result column="expense_Time" property="expenseTime" jdbcType="TIMESTAMP" />
 		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
-		<result column="date_state" property="expenseDateState" jdbcType="VARCHAR" />
+		<result column="data_state" property="dataState" jdbcType="VARCHAR" />
 		<result column="type_id" property="typeId" jdbcType="INTEGER" />
 		<result column="type_name" property="typeName" jdbcType="VARCHAR" />
 	</resultMap>
 	
-	<select id="expenseVO" resultMap="fmlExpenseVO">
-		select d.id id, m.id expense_id ,m.name expense_name,p.id payer_id,p.name payer,
-		expense, expense_desc, expense_time, update_time, d.data_state
+	<insert id="insert" parameterType="fmlExpense">
+		insert into fml_expense(member_id,payer_id,expense,expense_type,expense_desc,expense_time)
+		value(#{expenseId},#{payerId},#{expense},#{expenseType},#{expenseDesc},#{expenseTime})
+	</insert>
+	
+	<update id="update" parameterType="fmlExpense">
+		update fml_expense set member_id=#{expenseId}, payer_id=#{payerId}, expense=#{expense}, 
+		expense_type=#{expenseType}, expense_desc=#{expenseDesc}, expense_time=#{expenseTime} 
+		where id=#{recordId}
+	</update>
+	
+	<update id="updateDataStateTodel" parameterType="java.util.List">
+		update fml_expense set data_state='del'
+		where id in 
+			<foreach collection="list" index="index" item="id" open="(" separator="," close=")">
+					#{id}
+			</foreach>
+	</update>
+	
+	<select id="countExpenses" resultType="INTEGER">
+		select count(1)
 		from fml_expense d left join fml_member m on d.member_id=m.id 
 		left join fml_member p on d.payer_id=p.id 
-		where data_state='init' order by update_time asc 
+		left join expense_type t on d.expense_type=t.type_id
+		where 1=1
+			<if test="expenseId != null">
+				and d.member_id=#{expenseId}
+			</if>
+			<if test="payerId != null">
+				and d.payer_id=#{payerId}
+			</if>
+			<if test="typeId != null">
+				and d.expense_type=#{typeId}
+			</if>
+			<if test="startTime != null">
+				and d.expense_time&gt;= #{startTime}
+			</if>
+			<if test="endTime != null">
+				and d.expense_time&lt;=#{endTime}
+			</if> 
+		order by update_time asc 
+	</select>
+	<select id="expenseVO" resultMap="fmlExpenseVO">
+		select d.id id, m.id expense_id,m.name expense_name,p.id payer_id,p.name payer,
+			expense, expense_desc, expense_time, update_time, d.data_state,t.type_id,t.type_name
+		from fml_expense d left join fml_member m on d.member_id=m.id 
+		left join fml_member p on d.payer_id=p.id 
+		left join expense_type t on d.expense_type=t.type_id
+		where 1=1 
+			<if test="expenseId != null">
+				and d.member_id=#{expenseId}
+			</if>
+			<if test="payerId != null">
+				and d.payer_id=#{payerId}
+			</if>
+			<if test="typeId != null">
+				and d.expense_type=#{typeId}
+			</if>
+			<if test="startTime != null">
+				and d.expense_time&gt;=#{startTime}
+			</if>
+			<if test="endTime != null">
+				and d.expense_time&lt;=#{endTime}
+			</if>
+		order by id desc 
 		<if test="pageSize != 0">
 			limit #{page},#{pageSize}
 		</if>
@@ -46,7 +105,7 @@
 	
 	<select id="getDtoRecordById" resultMap="fmlExpenseVO">
 		select d.id id, m.id expense_id ,m.name expense_name,p.id payer_id,p.name payer,
-		expense,expense_desc,expense_time ,update_time, d.data_state,t.type_id,t.type_name
+			expense,expense_desc,expense_time ,update_time, d.data_state,t.type_id,t.type_name
 		from fml_expense d left join fml_member m on d.member_id=m.id 
 		left join expense_type t on d.expense_type=t.type_id
 		left join fml_member p on d.payer_id=p.id 
