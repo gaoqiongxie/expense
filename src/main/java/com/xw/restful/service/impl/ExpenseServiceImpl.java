@@ -1,10 +1,14 @@
 package com.xw.restful.service.impl;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.log4j.Logger;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -23,12 +27,13 @@ import com.xw.restful.service.ExpenseService;
 import com.xw.restful.stdo.APIRequest;
 import com.xw.restful.utils.BaseUtils;
 import com.xw.restful.utils.ParamDataEntity;
+import com.xw.restful.utils.excel.ExcelUtils;
 
 @Component("expenseService")
 @Service
 public class ExpenseServiceImpl implements ExpenseService{
 	
-	private static Logger log = Logger.getLogger(ExpenseServiceImpl.class);
+	private static Logger logger = Logger.getLogger(ExpenseServiceImpl.class);
 
 	@Autowired
 	FmlMemberDao fmlMemberDao;
@@ -105,5 +110,43 @@ public class ExpenseServiceImpl implements ExpenseService{
 			return 0;
 		}
 	}
+
+	@Override
+	public float monthInfo() {
+		return fmlExpenseDao.sumExpenseMonth();
+	}
+
+	@Override
+	public void exportList(APIRequest apiRequest, HttpServletResponse response) {
+		List<ExpenseVO> expenses = getExpensesList(apiRequest);
+		if(expenses.size()<1) return;
+		
+        XSSFWorkbook xSSFWorkbook =  ExcelUtils.producedExcel("fml_expense",expenses,
+        		"支出人:expenseName:20,支付人:payer:20,支出金额:expense:20,支出类型:typeName:20,支出时间:expenseTime:20,备注:expenseDesc:20");
+        try {
+        	ExcelUtils.renderExcel(response, xSSFWorkbook, "fml_expense_"+System.currentTimeMillis()+".xlsx");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+	}
+
+	/**
+	 * 获取支出列表
+	 * @param apiRequest
+	 * @return
+	 */
+	private List<ExpenseVO> getExpensesList(APIRequest apiRequest) {
+		ParamDataEntity paramDataEntity = new ParamDataEntity(apiRequest);
+		String startTime = paramDataEntity.GetParamStringValue("startTime", null);
+		String endTime = paramDataEntity.GetParamStringValue("endTime", null);
+		Map<String, Object> paMap = new HashMap<String, Object>();
+		if(!StringUtils.isEmpty(startTime)) paMap.put("startTime", startTime);
+		if(!StringUtils.isEmpty(endTime)) paMap.put("endTime", endTime);
+		
+		List<ExpenseVO> expenses = fmlExpenseDao.expenseVO(paMap);
+		
+		return expenses;
+	}
+
 
 }

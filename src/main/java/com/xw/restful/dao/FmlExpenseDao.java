@@ -23,4 +23,6 @@ public interface FmlExpenseDao {
 
 	int updateDataStateTodel(List<Integer> ids);
 
+	float sumExpenseMonth();
+
 }

@@ -98,7 +98,7 @@
 				and d.expense_time&lt;=#{endTime}
 			</if>
 		order by id desc 
-		<if test="pageSize != 0">
+		<if test="pageSize != null and pageSize != 0">
 			limit #{page},#{pageSize}
 		</if>
 	</select>
@@ -112,4 +112,9 @@
 		where d.id=#{id}
 	</select>
 
+	<select id="sumExpenseMonth" resultType="FLOAT">
+		select sum(expense)
+		from fml_expense 
+		where data_state='init' and DATE_FORMAT( expense_time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+	</select>
 </mapper>

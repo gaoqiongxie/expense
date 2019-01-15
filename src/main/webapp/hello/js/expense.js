@@ -1,6 +1,9 @@
 var actionType;
 
 $(function() {
+	$.get("/monthInfo",function(data,status){
+		$(".monthInfo").html("本月开销:"+data.data+"(元)");
+	});
 	
 	setExpenseTypeSlc('sType');
 	setMemberSlc('sExpense');
@@ -192,6 +195,14 @@ $(function() {
 			clear();
 			resetContent('expenseForm');
 		}
+	});
+	
+	
+	$("a[name='expButton']").bind('click',function(){
+		var startTime = $('#startTime').datebox('getValue');	
+		var endTime = $('#endTime').datebox('getValue');	
+		var url = '/expenses/export?startTime='+startTime+'&endTime='+endTime;
+		$('<form method="post" action="' + url + '"></form>').appendTo('body').submit().remove();
 	});
 	
 });

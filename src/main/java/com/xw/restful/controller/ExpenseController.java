@@ -2,6 +2,8 @@ package com.xw.restful.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,5 +50,16 @@ public class ExpenseController extends BaseController{
 	public APIResult getDtoRecordById(@PathVariable("id") String id) {
 		ExpenseVO expenseVO = expenseService.getDtoRecordById(id);
 		return new APIResult(expenseVO);
+	}
+	
+	@RequestMapping("/monthInfo")
+	public APIResult monthInfo() {
+		return new APIResult(expenseService.monthInfo());
+	}
+	
+	@RequestMapping(value="/expenses/export", method=RequestMethod.POST)
+	public void exportList(HttpServletResponse response) {
+		initParams();
+		expenseService.exportList(this.apiRequest, response);
 	}
 }
