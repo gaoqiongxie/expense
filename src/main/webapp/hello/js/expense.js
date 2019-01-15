@@ -1,9 +1,7 @@
 var actionType;
 
 $(function() {
-	$.get("/monthInfo",function(data,status){
-		$(".monthInfo").html("本月开销:"+data.data+"(元)");
-	});
+	showMonthExpense();
 	
 	setExpenseTypeSlc('sType');
 	setMemberSlc('sExpense');
@@ -154,9 +152,9 @@ $(function() {
 							$.messager.progress('close');
 							 if(data.status){
 								 flashTable('expenseList');
-						    	   $.messager.alert('提示',data.msg,'info');
+						    	  $.messager.alert('提示',data.msg,'info');
 						     } else{
-						    	   $.messager.alert('提示',data.msg,'warning');
+						    	  $.messager.alert('提示',data.msg,'warning');
 						     }
 						}
 					});
@@ -185,6 +183,7 @@ $(function() {
 			iconCls:'icon-no',
 			handler:function(){
 				clear();
+				showMonthExpense();
 				$('#expenseDlg').dialog('close');
 			}
 		}],
@@ -193,6 +192,7 @@ $(function() {
 		},
 		onClose:function(){
 			clear();
+			showMonthExpense();
 			resetContent('expenseForm');
 		}
 	});
@@ -206,6 +206,12 @@ $(function() {
 	});
 	
 });
+
+function showMonthExpense(){
+	$.get("/monthInfo",function(data,status){
+		$(".monthInfo").html("本月开销:"+data.data+"(元)");
+	});
+}
 
 function checkData(){
 	var memberId=$("#eExpense").combobox('getValues');
