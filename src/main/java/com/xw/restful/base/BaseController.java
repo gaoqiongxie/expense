@@ -74,7 +74,6 @@ public class BaseController {
 	}
 
 	public void initParams() {
-//		APIRequest apirequest = null;
 		try {
 			String submitMehtod = request.getMethod();
 			// GET
@@ -92,12 +91,8 @@ public class BaseController {
 					Map<String, Object> paramMap = new HashMap<String, Object>();
 					paramMap.put("source", properties.get("source"));
 					paramMap.put("time", properties.get("time"));
-					paramMap.put("wx_openID", properties.get("wx_openID"));
-					paramMap.put("opTicket", properties.get("opTicket"));
 					properties.remove("source");
 					properties.remove("time");
-					properties.remove("wx_openID");
-					properties.remove("opTicket");
 					paramMap.put("data", properties);
 					apiRequest = JSON.parseObject(JSON.toJSONString(paramMap), APIRequest.class);
 				}

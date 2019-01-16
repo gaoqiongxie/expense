@@ -1,5 +1,27 @@
 var sysUrl=parent.baseJs;
 
+
+//全局监控所有的Ajax请求，对于没有权限或登录失效的ajax访问，踢回到登录页面
+$(function(){
+	$.ajaxSetup({
+		headers: { // 默认添加请求头
+		        "Author": "gaoqiongxie"
+		    },
+	    cache : false,
+	    global : true,
+	    complete: function(req, status) {
+		    try{
+		        var reqObj = eval('('+req.responseText+")");
+		        //如果数据请求验证时，对应的请求资源(路径)没有权限(或者没有登录)
+		        if (reqObj && reqObj.noRight) {
+		        	alert("你无权进行该项操作，可能是登录失效，请重新登录！");
+		            window.location.href = reqObj.loginUrl;
+		        }
+		      }catch(e){}
+		    }
+	});
+});
+
 /**
  *	通用功能js
  *	隐藏手机号码
@@ -558,25 +580,6 @@ function delHtmlTag(str)
 {
         return str.replace(/<[^>]+>/g,"");//去掉所有的html标记
 }
-
-
-//全局监控所有的Ajax请求，对于没有权限或登录失效的ajax访问，踢回到登录页面
-$(function(){
-	$.ajaxSetup({
-	    cache : false,
-	    global : true,
-	    complete: function(req, status) {
-	    try{
-	        var reqObj = eval('('+req.responseText+")");
-	        //如果数据请求验证时，对应的请求资源(路径)没有权限(或者没有登录)
-	        if (reqObj && reqObj.noRight) {
-	        	alert("你无权进行该项操作，可能是登录失效，请重新登录！");
-	            window.location.href = reqObj.loginUrl;
-	        }
-	      }catch(e){}
-	    }
-	});
-});
 
 function addError(tr,html){
 	tr.addClass("error");

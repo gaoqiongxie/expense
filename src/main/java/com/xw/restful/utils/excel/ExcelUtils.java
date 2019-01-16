@@ -218,8 +218,6 @@ public class ExcelUtils {
 			headerValues.add(sortHeaderValues.get(temp));
 			headerValusNickNames.add(sortHeaderValuesNickNames.get(temp));
 		}
-		
-		
 	}
 	
 	/**

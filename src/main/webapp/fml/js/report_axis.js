@@ -1,6 +1,3 @@
- $.ajaxSetup({  
-    async : false  
-});       
 $(function() {
 	var dataOrderByExpens, dataOrderByPayer, dataOrderByType;
 	$.get("/expenses/group?groupBy=expenseId",function(data,status){
@@ -121,8 +118,6 @@ function getSeriesData(dataSource, legendData){
 	var seriesArr = new Array();
 	var serie;
 	$.each(dataSource,function(n,v) {   
-		console.log("getSeriesData-dataSource-"+v.groupValue);
-		console.log("v.groupValue-"+JSON.stringify(v.groupValue));
 		var arr =  v.groupValue;
 		for(var i = 0; i < arr.length; i++){
 		    var ai = arr[i];
@@ -144,12 +139,10 @@ function getSeriesData(dataSource, legendData){
 		    }
 		}
 	});
-	console.log(JSON.stringify(dest));
 	$.each(dest,function(n,v) {   
 		var serie = seriesInit(v.name, v.data);
 		seriesArr.push(serie);
 	})
-	console.log("seriesArr-"+JSON.stringify(seriesArr));
 	return seriesArr;
 }
 
