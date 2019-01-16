@@ -1,38 +1,38 @@
 $(function() {
 	var dataOrderByExpens, dataOrderByPayer, dataOrderByType;
 	$.get("/expenses/group?groupBy=expenseId",function(data,status){
-		dataOrderByExpens=data.data;
-		var myChart = echarts.init(document.getElementById("bar1"));
+		dataOrderByExpense=data.data;
+		var myChart = echarts.init(document.getElementById("bar3"));
 		myChart.clear();
-		option = getOptions(dataOrderByExpens)
+		option = getOptions(dataOrderByExpense, "expenseId")
 		if (option && typeof option === "object") {
 		    myChart.setOption(option, true);
 		}
 	});
 	
 	$.get("/expenses/group?groupBy=payerId",function(data,status){
-		dataOrderByExpens=data.data;
+		dataOrderByPayerId=data.data;
 		var myChart = echarts.init(document.getElementById("bar2"));
 		myChart.clear();
-		option = getOptions(dataOrderByExpens)
+		option = getOptions(dataOrderByPayerId, "payerId")
 		if (option && typeof option === "object") {
 		    myChart.setOption(option, true);
 		}
 	});
 	
 	$.get("/expenses/group?groupBy=typeId",function(data,status){
-		dataOrderByExpens=data.data;
-		var myChart = echarts.init(document.getElementById("bar3"));
+		dataOrderByTypeId=data.data;
+		var myChart = echarts.init(document.getElementById("bar1"));
 		myChart.clear();
-		option = getOptions(dataOrderByExpens)
+		option = getOptions(dataOrderByTypeId, "typeId")
 		if (option && typeof option === "object") {
 		    myChart.setOption(option, true);
 		}
 	});
 });
 
-function getOptions(dataSource) {
-	var legendData = getLegendData(dataSource);
+function getOptions(dataSource, type) {
+	var legendData = getLegendData(type);
 	var xAxisData = getXAxisData(dataSource);
 	var seriesData = getSeriesData(dataSource, legendData);
 	option = null;
@@ -90,14 +90,28 @@ function getColor(key){
  * @param dataSource
  * @returns
  */
-function getLegendData(dataSource){
+function getLegendData(type){
+	
 	var legendArr = new Array();
-	$.get("/members",function(data,status){
-		$.each(data.data,function(n,v) {   
-			legendArr.push(v.name);
+	
+	if("typeId"==type){
+		$.get("/types",function(data,status){
+			$.each(data.data,function(n,v) {   
+				legendArr.push(v.typeName);
+			});
+			
+			return legendArr;
 		});
-	});
-	return legendArr;
+	}else{
+		$.get("/members",function(data,status){
+			$.each(data.data,function(n,v) {   
+				console.log(v.name);
+				legendArr.push(v.name);
+			});
+			return legendArr;
+		});
+	}
+	
 }
 
 /**
