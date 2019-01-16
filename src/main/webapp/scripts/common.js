@@ -705,7 +705,7 @@ function validatePhone(_this){
 
 
 function formatterDateTime(time) {
-	var date = new Date(time);
+	var date = new Date(time.replace(/\-/g, "/"));//ios系统下的浏览器年月则为Nan
 	var datetime = date.getFullYear()
      + "-"// "年"
      + ((date.getMonth() + 1) > 10 ? (date.getMonth() + 1) : "0"
