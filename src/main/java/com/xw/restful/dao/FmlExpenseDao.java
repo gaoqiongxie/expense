@@ -6,6 +6,7 @@ import java.util.Map;
 import com.xw.restful.domain.ExpenseType;
 import com.xw.restful.domain.FmlExpense;
 import com.xw.restful.domain.vo.ExpenseVO;
+import com.xw.restful.domain.vo.GroupExpenseVO;
 
 public interface FmlExpenseDao {
 	
@@ -24,5 +25,7 @@ public interface FmlExpenseDao {
 	int updateDataStateTodel(List<Integer> ids);
 
 	float sumExpenseMonth();
+
+	List<GroupExpenseVO> groupExpenses(GroupExpenseVO groupExpenseVO);
 
 }

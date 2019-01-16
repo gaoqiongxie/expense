@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import com.xw.restful.domain.ExpenseType;
 import com.xw.restful.domain.FmlMember;
 import com.xw.restful.domain.vo.ExpenseVO;
+import com.xw.restful.domain.vo.GroupExpenseVO;
 import com.xw.restful.domain.vo.Page;
 import com.xw.restful.stdo.APIRequest;
 
@@ -54,6 +55,18 @@ public interface ExpenseService {
 	 */
 	float monthInfo();
 
+	/**
+	 * 根据时间段导出开销
+	 * @param apiRequest
+	 * @param response
+	 */
 	void exportList(APIRequest apiRequest, HttpServletResponse response);
+
+	/**
+	 * 分组统计月开销
+	 * @param apiRequest
+	 * @return
+	 */
+	List<GroupExpenseVO> groupExpenses(APIRequest apiRequest);
 
 }

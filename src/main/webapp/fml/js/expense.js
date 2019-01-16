@@ -10,7 +10,7 @@ $(function() {
 	$("#expenseList").datagrid({
 		title : '家庭支出',
 		width: $(window).width()*1,
-		height:$(window).height()*0.8,
+		height:$(window).height()*0.5,
 		iconCls : 'icon-save',
 		fitColumns :true,
 		striped : true,
@@ -46,7 +46,7 @@ $(function() {
 			 },
 			 {field : 'expenseDesc',title : '备注',width : fillsize(0.20),align : 'center'},
 			 {field : 'dataState',title : '状态',width : fillsize(0.20),align : 'center'},
-			 {field : 'updateTime',title : '更新时间',width : fillsize(0.20),align : 'center',
+			 {field : 'updateTime',title : '更新时间',width : fillsize(0.30),align : 'center',
 				 formatter:function(value,row,index){
 					 return value;
 				 }	 
@@ -198,12 +198,17 @@ $(function() {
 	});
 	
 	
-	$("a[name='expButton']").bind('click',function(){
+	$("#expButton").bind('click',function(){
 		var startTime = $('#startTime').datebox('getValue');	
 		var endTime = $('#endTime').datebox('getValue');	
 		var url = '/expenses/export?startTime='+startTime+'&endTime='+endTime;
 		$('<form method="post" action="' + url + '"></form>').appendTo('body').submit().remove();
 	});
+	
+	$("a[name='compareButton']").bind('click',function(){
+		
+	});
+	
 	
 });
 

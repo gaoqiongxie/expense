@@ -24,13 +24,22 @@
 		<result column="payer_id" property="payerId" jdbcType="INTEGER" />
 		<result column="expense_name" property="expenseName" jdbcType="INTEGER" />
 		<result column="payer" property="payer" jdbcType="VARCHAR" />
-		<result column="expense" property="expense" jdbcType="VARCHAR" />
+		<result column="expense" property="expense" jdbcType="FLOAT" />
 		<result column="expense_desc" property="expenseDesc" jdbcType="VARCHAR" />
 		<result column="expense_Time" property="expenseTime" jdbcType="TIMESTAMP" />
 		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
 		<result column="data_state" property="dataState" jdbcType="VARCHAR" />
 		<result column="type_id" property="typeId" jdbcType="INTEGER" />
 		<result column="type_name" property="typeName" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<resultMap type="com.xw.restful.domain.vo.GroupExpenseVO" id="groupExpenseVO">
+		<result column="groupKey" property="groupKey" jdbcType="VARCHAR" />
+		<result column="month" property="month" jdbcType="VARCHAR" />
+		<collection property="groupValue"  ofType="com.xw.restful.domain.vo.GroupValue">
+  	  		<id column="name" property="name" jdbcType="VARCHAR" />
+    		<result column="expense_sum" property="expenseSum" jdbcType="FLOAT" />
+		</collection>
 	</resultMap>
 	
 	<insert id="insert" parameterType="fmlExpense">
@@ -116,5 +125,38 @@
 		select sum(expense)
 		from fml_expense 
 		where data_state='init' and DATE_FORMAT( expense_time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+	</select>
+	
+	<select id="groupExpenses" resultMap="groupExpenseVO" parameterType="groupExpenseVO">
+		select <choose>
+				<when test="groupKey=='expenseId'">
+					m.name
+				</when>
+				<when test="groupKey=='payerId'">
+					p.name
+				</when>
+				<otherwise>
+					t.type_name
+				</otherwise>
+		</choose>
+			name,sum(expense) expense_sum,date_format(expense_time, '%Y-%m') month,#{groupKey} groupKey
+		from fml_expense d 
+			left join fml_member m on d.member_id=m.id
+			left join fml_member p on d.payer_id=p.id  
+			left join expense_type t on d.expense_type=t.type_id
+		where data_state='init'
+		group by 
+		<choose>
+			<when test="groupKey=='expenseId'">
+				d.member_id
+			</when>
+			<when test="groupKey=='payerId'">
+				d.payer_id
+			</when>
+			<otherwise>
+				d.expense_type
+			</otherwise>
+		</choose>
+		,date_format(expense_time, '%Y-%m')
 	</select>
 </mapper>

@@ -130,4 +130,12 @@ public class ExpenseVO implements Serializable{
 		this.dataState = dataState;
 	}
 
+	@Override
+	public String toString() {
+		return "ExpenseVO [recordId=" + recordId + ", expenseId=" + expenseId + ", payerId=" + payerId
+				+ ", expenseName=" + expenseName + ", payer=" + payer + ", expense=" + expense + ", expenseDesc="
+				+ expenseDesc + ", expenseTime=" + expenseTime + ", updateTime=" + updateTime + ", dataState="
+				+ dataState + ", typeId=" + typeId + ", typeName=" + typeName + "]";
+	}
+
 }

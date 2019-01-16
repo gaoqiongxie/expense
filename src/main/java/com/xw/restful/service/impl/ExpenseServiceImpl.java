@@ -22,6 +22,7 @@ import com.xw.restful.domain.ExpenseType;
 import com.xw.restful.domain.FmlExpense;
 import com.xw.restful.domain.FmlMember;
 import com.xw.restful.domain.vo.ExpenseVO;
+import com.xw.restful.domain.vo.GroupExpenseVO;
 import com.xw.restful.domain.vo.Page;
 import com.xw.restful.service.ExpenseService;
 import com.xw.restful.stdo.APIRequest;
@@ -144,6 +145,19 @@ public class ExpenseServiceImpl implements ExpenseService{
 		if(!StringUtils.isEmpty(endTime)) paMap.put("endTime", endTime);
 		
 		List<ExpenseVO> expenses = fmlExpenseDao.expenseVO(paMap);
+		
+		return expenses;
+	}
+
+	@Override
+	public List<GroupExpenseVO> groupExpenses(APIRequest apiRequest) {
+		ParamDataEntity paramDataEntity = new ParamDataEntity(apiRequest);
+		String groupBy = paramDataEntity.GetParamStringValue("groupBy", "typeId");
+		
+		GroupExpenseVO groupVo = new GroupExpenseVO();
+		groupVo.setGroupKey(groupBy);
+		
+		List<GroupExpenseVO> expenses = fmlExpenseDao.groupExpenses(groupVo);
 		
 		return expenses;
 	}
