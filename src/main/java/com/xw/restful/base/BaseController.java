@@ -78,7 +78,7 @@ public class BaseController {
 			// GET
 			if (submitMehtod.equals("GET")) {
 				String queryString = request.getQueryString();
-
+				
 				if (isJsonStr(queryString)) {// json格式
 					queryString = queryString == null ? "{}" : urlDecode(queryString);
 					apiRequest = JSON.parseObject(queryString, APIRequest.class);

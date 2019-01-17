@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,6 +19,7 @@ import com.xw.restful.service.ExpenseService;
 import com.xw.restful.stdo.APIResult;
 
 @RestController
+@Scope("prototype")
 public class ExpenseController extends BaseController{
 	@Autowired
 	ExpenseService expenseService;

@@ -2,8 +2,6 @@ package com.xw.restful.aspect;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -19,9 +17,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.alibaba.fastjson.JSON;
-import com.xw.restful.utils.NetUtils;
 import com.xw.restful.utils.HttpRequestUtils;
+import com.xw.restful.utils.NetUtils;
 
 @Aspect
 @Component
@@ -44,8 +41,8 @@ public class ControllerAspect {
 		requestInfosMap = getRequestInfos(request);
 		String classMethod = getClassMethod(joinPoint);
 		requestInfosMap.put("class_method", classMethod);
-		
-		logger.info("begin-"+requestInfosMap);
+		requestInfosMap.put("thread_id", Thread.currentThread().getId());
+		logger.info("begin-requestInfosMap:"+requestInfosMap);
 	}
 	
 
@@ -53,7 +50,7 @@ public class ControllerAspect {
 	public void doAfter() {
 		endTimeStamp =  System.currentTimeMillis();
 		requestInfosMap.put("timeTake(ms)", endTimeStamp-startTimeStamp);
-		logger.info("end-"+requestInfosMap);
+		logger.info("end-requestInfosMap:"+requestInfosMap);
 	}
 	
 	private String getClassMethod(JoinPoint joinPoint) {

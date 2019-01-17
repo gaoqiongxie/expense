@@ -19,7 +19,7 @@ public class HttpRequestUtils {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static Map getRequestParamters(HttpServletRequest request) {
 		// 获取所有的请求参数
-		Map properties = new HashMap(request.getParameterMap());
+		Map properties = request.getParameterMap();
 		// 返回值Map
 		Map returnMap = new HashMap();
 		Iterator entries = properties.entrySet().iterator();
