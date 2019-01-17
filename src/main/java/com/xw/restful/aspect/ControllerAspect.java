@@ -21,6 +21,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.alibaba.fastjson.JSON;
 import com.xw.restful.utils.NetUtils;
+import com.xw.restful.utils.HttpRequestUtils;
 
 @Aspect
 @Component
@@ -59,45 +60,13 @@ public class ControllerAspect {
 		return joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName();
 	}
 	
-	public Map<String, Object> getRequestInfos(HttpServletRequest request) {
+	private Map<String, Object> getRequestInfos(HttpServletRequest request) {
 		Map<String, Object> map = new LinkedHashMap<String, Object>();
 		map.put("start_time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date()));
 		map.put("client_iP", NetUtils.getLocalAddress());
 		map.put("request_method", request.getMethod());
-		map.put("data", getRequestParamters(request));
+		map.put("data", HttpRequestUtils.getRequestParamters(request));
 		return map;
 	}
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static Map getRequestParamters(HttpServletRequest request) {
-		// 获取所有的请求参数
-		Map properties = new HashMap(request.getParameterMap());
-		// 返回值Map
-		Map returnMap = new HashMap();
-		Iterator entries = properties.entrySet().iterator();
-		Map.Entry entry;
-		String name = "";
-		String value = "";
-		// 读取map中的值
-		while (entries.hasNext()) {
-			entry = (Map.Entry) entries.next();
-			name = (String) entry.getKey();
-			Object valueObj = entry.getValue();
-			if (null == valueObj) {
-				value = " ";
-				returnMap = JSON.parseObject(name);
-			} else if (valueObj instanceof String[]) {
-				String[] values = (String[]) valueObj;
-				for (String value2 : values) {
-					value = value2 + ",";
-				}
-				value = value.substring(0, value.length() - 1);
-			} else {
-				value = valueObj.toString();
-			}
-			// 将读取到的值存入map中
-			returnMap.put(name, value);
-		}
-		return returnMap;
-	}
 }

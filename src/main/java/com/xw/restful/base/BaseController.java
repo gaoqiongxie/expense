@@ -1,10 +1,8 @@
 package com.xw.restful.base;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.alibaba.fastjson.JSON;
 import com.xw.restful.stdo.APIRequest;
+import com.xw.restful.utils.HttpRequestUtils;
 
 public class BaseController {
 	
@@ -84,7 +83,7 @@ public class BaseController {
 					queryString = queryString == null ? "{}" : urlDecode(queryString);
 					apiRequest = JSON.parseObject(queryString, APIRequest.class);
 				} else {// 普通参数
-					Map properties = getRequestParamters(request);
+					Map properties = HttpRequestUtils.getRequestParamters(request);
 					if (properties == null) {
 						properties = new HashMap<>();
 					}
@@ -97,11 +96,11 @@ public class BaseController {
 					apiRequest = JSON.parseObject(JSON.toJSONString(paramMap), APIRequest.class);
 				}
 			} else {// POST|PUT|DELETE
-				String postJsonStr = getRequestPostStr(request);
+				String postJsonStr = HttpRequestUtils.getRequestPostStr(request);
 				if (isJsonStr(postJsonStr)) {// JSON格式
 					apiRequest = JSON.parseObject(postJsonStr, APIRequest.class);
 				} else {
-					Map properties = getRequestParamters(request);
+					Map properties = HttpRequestUtils.getRequestParamters(request);
 					if (properties == null) {
 						properties = new HashMap<>();
 					}
@@ -136,85 +135,5 @@ public class BaseController {
 		}
 		return false;
 	}
-
-	/**
-	 * 获得所有请求的参数
-	 * 
-	 * @param request
-	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static Map getRequestParamters(HttpServletRequest request) {
-		// 获取所有的请求参数
-		Map properties = new HashMap(request.getParameterMap());
-		// 返回值Map
-		Map returnMap = new HashMap();
-		Iterator entries = properties.entrySet().iterator();
-		Map.Entry entry;
-		String name = "";
-		String value = "";
-		// 读取map中的值
-		while (entries.hasNext()) {
-			entry = (Map.Entry) entries.next();
-			name = (String) entry.getKey();
-			Object valueObj = entry.getValue();
-			if (null == valueObj) {
-				value = " ";
-				returnMap = JSON.parseObject(name);
-			} else if (valueObj instanceof String[]) {
-				String[] values = (String[]) valueObj;
-				for (String value2 : values) {
-					value = value2 + ",";
-				}
-				value = value.substring(0, value.length() - 1);
-			} else {
-				value = valueObj.toString();
-			}
-			// 将读取到的值存入map中
-			returnMap.put(name, value);
-		}
-		return returnMap;
-	}
-
-	/**
-	 * 描述:获取 post 请求内容
-	 * 
-	 * @param request
-	 * @return
-	 * @throws IOException
-	 */
-	public static String getRequestPostStr(HttpServletRequest request) throws IOException {
-		byte buffer[] = getRequestPostBytes(request);
-		if (buffer == null) {
-			return null;
-		}
-
-		String charEncoding = request.getCharacterEncoding();
-		if (charEncoding == null) {
-			charEncoding = "UTF-8";
-		}
-		return new String(buffer, charEncoding);
-	}
 	
-	/**
-     * 描述:获取 post 请求的 byte[] 数组
-     * @param request
-     * @return
-     * @throws IOException
-     */
-    public static byte[] getRequestPostBytes(HttpServletRequest request) throws IOException {
-        int contentLength = request.getContentLength();
-        if (contentLength < 0) {
-            return null;
-        }
-        byte buffer[] = new byte[contentLength];
-        for (int i = 0; i < contentLength;) {
-
-            int readlen = request.getInputStream().read(buffer, i, contentLength - i);
-            if (readlen == -1) {
-                break;
-            }
-            i += readlen;
-        }
-        return buffer;
-    }
 }
