@@ -29,6 +29,7 @@ $(function() {
 		    myChart.setOption(option, true);
 		}
 	});
+	
 });
 
 function getOptions(dataSource, type) {
@@ -39,7 +40,7 @@ function getOptions(dataSource, type) {
 	option = {
 	    title : {
 	        text: '家庭支出',
-	        subtext: '依据'+dataSource[0].groupKey+'统计'
+	        subtext: '依据'+getType(dataSource[0].groupKey)+'统计'
 	    },
 	    tooltip : {
 	        trigger: 'axis'
@@ -75,6 +76,17 @@ function getOptions(dataSource, type) {
 	return option;
 }
 
+function getType(key){
+	switch (key) {
+	case "expenseId":
+		return "支出人"
+	case "payerId":
+		return "支付人"
+	default:
+		return "花销类型"
+	}
+}
+
 function getColor(key){
 	switch (key) {
 	case "expenseId":
@@ -105,7 +117,6 @@ function getLegendData(type){
 	}else{
 		$.get("/members",function(data,status){
 			$.each(data.data,function(n,v) {   
-				console.log(v.name);
 				legendArr.push(v.name);
 			});
 			return legendArr;

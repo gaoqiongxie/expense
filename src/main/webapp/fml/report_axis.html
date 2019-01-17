@@ -16,13 +16,13 @@
 <style type="text/css">
 body {
 	height: 1200px;
-}
+} 
 
 .main {
 	position: fixed;
 	left: 0;
 	top: 0;
-	height: 100%;
+	height: 100%; 
 	width: 100%;
 }
 
@@ -35,10 +35,17 @@ body {
 	position: relative;
 }
 
-.div-square-up {
+/* .div-square-up{
 	width: 100%;
 	margin: 0 auto;
 	height: 96%;
+	box-sizing: border-box;
+} */
+
+.div-square-up, .div-square-mid, .div-square-down {
+	width: 100%;
+	margin: 0 auto;
+	height: 30%;
 	box-sizing: border-box;
 }
 
@@ -62,7 +69,8 @@ body {
 </head>
 <body>
 
-	<div class="main">
+<!-- 品字 -->
+<!-- 	<div class="main">
 		<div class="wrapper-up">
 			<div class="div-square-up" id="bar1"></div>
 		</div>
@@ -70,6 +78,12 @@ body {
 			<div class="div-square-left" id="bar2"></div>
 			<div class="div-square-right" id="bar3"></div>
 		</div>
+	</div> -->
+	<!-- 上下 -->
+	<div class="main">
+		<div class="div-square-up" id="bar1"></div>
+		<div class="div-square-mid" id="bar2"></div>
+		<div class="div-square-down" id="bar3"></div>
 	</div>
 
 </body>

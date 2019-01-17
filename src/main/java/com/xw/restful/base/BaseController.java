@@ -145,7 +145,7 @@ public class BaseController {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static Map getRequestParamters(HttpServletRequest request) {
 		// 获取所有的请求参数
-		Map properties = request.getParameterMap();
+		Map properties = new HashMap(request.getParameterMap());
 		// 返回值Map
 		Map returnMap = new HashMap();
 		Iterator entries = properties.entrySet().iterator();

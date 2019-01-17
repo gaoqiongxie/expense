@@ -205,16 +205,11 @@ $(function() {
 		$('<form method="post" action="' + url + '"></form>').appendTo('body').submit().remove();
 	});
 	
-	$("a[name='compareButton']").bind('click',function(){
-		
-	});
-	
-	
 });
 
 function showMonthExpense(){
 	$.get("/monthInfo",function(data,status){
-		$(".monthInfo").html("本月开销:"+data.data+"(元)");
+		/*$(".monthInfo").html("本月开销:"+data.data+"(元)");*/
 	});
 }
 
