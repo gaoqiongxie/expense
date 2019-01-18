@@ -15,6 +15,8 @@ public class GroupExpenseVO implements Serializable{
 	private String month;
 	
 	private List<GroupValue> groupValue;
+	
+	private boolean groupByMonth;
 
 	public String getGroupKey() {
 		return groupKey;
@@ -38,6 +40,14 @@ public class GroupExpenseVO implements Serializable{
 
 	public void setMonth(String month) {
 		this.month = month;
+	}
+
+	public boolean isGroupByMonth() {
+		return groupByMonth;
+	}
+
+	public void setGroupByMonth(boolean groupByMonth) {
+		this.groupByMonth = groupByMonth;
 	}
 
 }

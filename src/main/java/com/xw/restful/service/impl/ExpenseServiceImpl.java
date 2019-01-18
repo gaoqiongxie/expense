@@ -153,9 +153,11 @@ public class ExpenseServiceImpl implements ExpenseService{
 	public List<GroupExpenseVO> groupExpenses(APIRequest apiRequest) {
 		ParamDataEntity paramDataEntity = new ParamDataEntity(apiRequest);
 		String groupBy = paramDataEntity.GetParamStringValue("groupBy", "typeId");
+		boolean groupByMonth = paramDataEntity.GetParamBoolValue("groupByMonth", true);
 		
 		GroupExpenseVO groupVo = new GroupExpenseVO();
 		groupVo.setGroupKey(groupBy);
+		groupVo.setGroupByMonth(groupByMonth);
 		
 		List<GroupExpenseVO> expenses = fmlExpenseDao.groupExpenses(groupVo);
 		

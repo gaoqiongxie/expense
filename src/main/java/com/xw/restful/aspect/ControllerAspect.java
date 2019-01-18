@@ -28,7 +28,7 @@ public class ControllerAspect {
 	public long endTimeStamp;
 	Map<String, Object> requestInfosMap = null;
 
-	// 这个切点的表达式需要根据自己的项目来写
+	// 切点
 	@Pointcut("execution(public * com.xw.restful.controller..*(..))")
 	public void log() {
 

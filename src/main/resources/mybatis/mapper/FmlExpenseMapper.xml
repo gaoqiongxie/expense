@@ -157,6 +157,8 @@
 				d.expense_type
 			</otherwise>
 		</choose>
-		,date_format(expense_time, '%Y-%m')
+		<if test="groupByMonth">
+			,date_format(expense_time, '%Y-%m')
+		</if>
 	</select>
 </mapper>

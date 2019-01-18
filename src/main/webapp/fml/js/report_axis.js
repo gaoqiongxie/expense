@@ -35,7 +35,7 @@ $(function() {
 function getOptions(dataSource, type) {
 	var legendData = getLegendData(type);
 	var xAxisData = getXAxisData(dataSource);
-	var seriesData = getSeriesData(dataSource, legendData);
+	var seriesData = getSeriesData(dataSource);
 	option = null;
 	option = {
 	    title : {
@@ -138,7 +138,7 @@ function  getXAxisData(dataSource){
 	return xAxisArr;
 }
 
-function getSeriesData(dataSource, legendData){
+function getSeriesData(dataSource){
 	var map = {}, dest = [];
 	var seriesArr = new Array();
 	var serie;
