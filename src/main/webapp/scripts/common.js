@@ -705,7 +705,7 @@ function validatePhone(_this){
 
 
 function formatterDateTime(time) {
-	var date = new Date(time.replace(/\-/g, "/"));//ios系统下的浏览器年月则为Nan
+	var date = new Date(time.toString().replace(/\-/g, "/"));//ios系统下的浏览器年月则为Nan
 	var datetime = date.getFullYear()
      + "-"// "年"
      + ((date.getMonth() + 1) > 10 ? (date.getMonth() + 1) : "0"
@@ -714,4 +714,25 @@ function formatterDateTime(time) {
      + (date.getDate() < 10 ? "0" + date.getDate() : date
              .getDate());
     return datetime;
+}
+
+function getColor(key){
+	switch (key) {
+	case "expenseId":
+		return ['#FFCC33','#333399', '#CC0033', '#FF0033', 
+			'#CCCC00','#006699', '#336666', '##003399',
+			'#FFFF00', '#FF6600', '#663399']
+	case "payerId":
+		return ['#FF6666', '#FF9900', '#FF6600', '#FF0033', 
+			'#CCCCFF', '#66CCFF', '#FFFFFF', '#336699', 
+			'#CCCCCC', '#003366', '#99CCFF']
+	case "typeId":
+		return ['#FF99CC', '#993366', '#CC3333', '#6666FF', 
+			'#FF9999', '#FFCC00', '#66CCCC', '#999900', 
+			'#CC99CC', '#FF9933', '#66CCFF']
+	default:
+		return['#c23531','#2f4554', '#61a0a8', '#d48265', 
+			'#91c7ae','#749f83',  '#ca8622', '#bda29a',
+			'#6e7074', '#546570', '#c4ccd3']
+	}
 }

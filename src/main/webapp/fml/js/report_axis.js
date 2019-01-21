@@ -87,16 +87,6 @@ function getType(key){
 	}
 }
 
-function getColor(key){
-	switch (key) {
-	case "expenseId":
-		return ['#c23531','#2f4554', '#61a0a8', '#d48265', '#91c7ae','#749f83',  '#ca8622', '#bda29a','#6e7074', '#546570', '#c4ccd3']
-	case "payerId":
-		return ['#FF4500', '#FF7F50', '#FA8072', '#F4A460', '#48D1CC', '#AFEEEE', '#00FFFF', '#00FA9A', '#7FFFD4', '#228B22', '#EEE8AA']
-	default:
-		return['#c23531','#2f4554', '#61a0a8', '#d48265', '#91c7ae','#749f83',  '#ca8622', '#bda29a','#6e7074', '#546570', '#c4ccd3']
-	}
-}
 /**
  * 图例
  * @param dataSource

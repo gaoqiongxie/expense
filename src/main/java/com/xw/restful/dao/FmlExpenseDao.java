@@ -7,6 +7,7 @@ import com.xw.restful.domain.ExpenseType;
 import com.xw.restful.domain.FmlExpense;
 import com.xw.restful.domain.vo.ExpenseVO;
 import com.xw.restful.domain.vo.GroupExpenseVO;
+import com.xw.restful.domain.vo.MonthExpense;
 
 public interface FmlExpenseDao {
 	
@@ -27,5 +28,7 @@ public interface FmlExpenseDao {
 	float sumExpenseMonth();
 
 	List<GroupExpenseVO> groupExpenses(GroupExpenseVO groupExpenseVO);
+
+	List<MonthExpense> monthExpense();
 
 }

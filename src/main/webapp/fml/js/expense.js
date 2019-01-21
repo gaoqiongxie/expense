@@ -15,13 +15,14 @@ $(function() {
 		fitColumns :true,
 		striped : true,
 		idField : 'recordId',
-//		singleSelect:true,
+		singleSelect:true,
 		url : '/expenses',
 		queryParams : {
 		},
 		onBeforeLoad:function(){
         },
-        onLoadSuccess:function(){
+        onLoadSuccess:function(data){
+        	compute(data);
         },
 		loadMsg : '数据加载,中请稍后......',
 		nowrap : false,
@@ -92,10 +93,25 @@ $(function() {
 		$('#expenseDlg').dialog('open');
 	});
 	
+	$("#addMember").bind("click",function(){
+		actionType="member";
+		$(".add_type").html("输入角色名：");
+		$('#addMemberOrType_Dlg').dialog({title:'新增角色'});
+		$('#addMemberOrType_Dlg').dialog('open');
+	});
+	
+	
+	$("#addType").bind("click",function(){
+		actionType="type";
+		$(".add_type").html("输入新增消费类型：");
+		$('#addMemberOrType_Dlg').dialog({title:'新增消费类型'});
+		$('#addMemberOrType_Dlg').dialog('open');
+	});
+	
 	
 	$("#editButton").bind("click",function(){
 		var row = getSingleSelectRow('expenseList','请选择一条记录！');
-		if(!row) return;
+		if(!row||!row.expenseId) return;
 		$.ajax({
 			type:'get',
 			url:'/expense/'+row.recordId,
@@ -197,6 +213,41 @@ $(function() {
 		}
 	});
 	
+	$('#addMemberOrType_Dlg').dialog({
+		 width:200, 
+		 height:150, 
+		 iconCls:'icon-save',
+		 closed: true,  
+	     modal:true,
+	     resizable:true,
+	     buttons:[{
+			text:'提交',
+			iconCls:'icon-ok',
+			handler:function(){
+				addMember();
+			}
+		},{ 
+			text:'取消',
+			iconCls:'icon-no',
+			handler:function(){
+				clear();
+				setExpenseTypeSlc('sType');
+				setMemberSlc('sExpense');
+				setMemberSlc('sPayer');
+				$('#addMemberOrType_Dlg').dialog('close');
+			}
+		}],
+		onOpen:function(){
+			
+		},
+		onClose:function(){
+			clear();
+			setExpenseTypeSlc('sType');
+			setMemberSlc('sExpense');
+			setMemberSlc('sPayer');
+		}
+	});
+	
 	
 	$("#expButton").bind('click',function(){
 		var startTime = $('#startTime').datebox('getValue');	
@@ -207,9 +258,78 @@ $(function() {
 	
 });
 
+function compute(data){
+	var rows = data.rows//获取当前的数据行
+    var expenseName = '',
+    	payer = '',
+    	expenseCount = 0,
+    	typeName = '',
+    	expenseTime = new Date(),
+    	expenseDesc = '',
+    	dataState = '',
+    	updateTime = new Date()
+    	;
+	 var length = rows.length;
+    for (var i = 0; i < length; i++) {
+    	if(expenseName.indexOf(rows[i]['expenseName'])<0)
+    		expenseName += rows[i]['expenseName']+"_";
+    	if(payer.indexOf(rows[i]['payer'])<0)
+    		payer += rows[i]['payer']+"_";
+    	expenseCount += rows[i]['expense'];
+    	if(typeName.indexOf(rows[i]['typeName'])<0)
+    		typeName += rows[i]['typeName']+"_";
+    	if(expenseDesc.indexOf(rows[i]['expenseDesc'])<0)
+    		expenseDesc += rows[i]['expenseDesc']+"_";
+    }
+
+   $("#expenseList").datagrid('appendRow', { 
+	   expenseName: expenseName,
+	   payer: payer,
+	   expense: expenseCount.toFixed(2),
+	   typeName:typeName,
+	   expenseTime:expenseTime,
+	   expenseDesc:expenseDesc,
+	   dataState:dataState,
+	   updateTime:formatterDateTime(updateTime)
+   	 });
+}
+
+function addMember(){
+	var name = $("#name").val();
+	if(!name) return;
+	if("member"==actionType){
+		$.post("/member",{ memberName:name},function(data,status){
+			if(data.status==1){
+	    	    closeDialog('addMemberOrType_Dlg');
+	    	    $("#name").val('');
+	    	    setExpenseTypeSlc('sType');
+				setMemberSlc('sExpense');
+				setMemberSlc('sPayer');
+				$.messager.alert('提示',data.msg,'info');
+	        } else{
+	    	    $.messager.alert('提示',data.msg,'warning');
+	        }
+	  	});
+	}else{
+		$.post("/type",{ typeName:name},function(data,status){
+			if(data.status==1){
+	    	    closeDialog('addMemberOrType_Dlg');
+	    	    $("#name").val('');
+	    	    setExpenseTypeSlc('sType');
+				setMemberSlc('sExpense');
+				setMemberSlc('sPayer');
+				$.messager.alert('提示',data.msg,'info');
+	        } else{
+	    	    $.messager.alert('提示',data.msg,'warning');
+	        }
+	  	});
+	}
+	
+}
+
 function showMonthExpense(){
 	$.get("/monthInfo",function(data,status){
-		/*$(".monthInfo").html("本月开销:"+data.data+"(元)");*/
+		$(".monthInfo").html("本月开销:"+data.data+"(元)");
 	});
 }
 
@@ -238,7 +358,6 @@ function checkData(){
 }
 
 function dealDate(){
-	
 	if($('#expenseForm').form('validate')){
 		$('#expenseForm').form('submit',{  
 		    url:'/expense?actionType='+actionType,  

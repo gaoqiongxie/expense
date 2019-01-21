@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -23,10 +24,12 @@ import com.xw.restful.domain.FmlExpense;
 import com.xw.restful.domain.FmlMember;
 import com.xw.restful.domain.vo.ExpenseVO;
 import com.xw.restful.domain.vo.GroupExpenseVO;
+import com.xw.restful.domain.vo.MonthExpense;
 import com.xw.restful.domain.vo.Page;
 import com.xw.restful.service.ExpenseService;
 import com.xw.restful.stdo.APIRequest;
 import com.xw.restful.utils.BaseUtils;
+import com.xw.restful.utils.ListUtils;
 import com.xw.restful.utils.ParamDataEntity;
 import com.xw.restful.utils.excel.ExcelUtils;
 
@@ -162,6 +165,35 @@ public class ExpenseServiceImpl implements ExpenseService{
 		List<GroupExpenseVO> expenses = fmlExpenseDao.groupExpenses(groupVo);
 		
 		return expenses;
+	}
+
+	@Override
+	public List<Object> treeExpenses(APIRequest apiRequest) {
+		List<MonthExpense> list = fmlExpenseDao.monthExpense();
+
+		// 多字段分组
+		Map<String, Map<String, Map<String, Map<String, List<MonthExpense>>>>> groupBy = list.stream().collect(
+				Collectors.groupingBy(MonthExpense::getMonth, Collectors.groupingBy(MonthExpense::getPayer, Collectors
+						.groupingBy(MonthExpense::getExpenseName, Collectors.groupingBy(MonthExpense::getTypeName)))));
+		
+		List relist = ListUtils.mapToList(groupBy);
+		return relist;
+	}
+
+	@Override
+	public int addMember(APIRequest apiRequest) {
+		ParamDataEntity paramDataEntity = new ParamDataEntity(apiRequest);
+		//判断是否已有该角色
+		String memberName = paramDataEntity.GetParamStringValue("memberName");
+		return fmlMemberDao.replaceInto(memberName);
+	}
+
+	@Override
+	public int addType(APIRequest apiRequest) {
+		ParamDataEntity paramDataEntity = new ParamDataEntity(apiRequest);
+		//判断是否已有该角色
+		String typeName = paramDataEntity.GetParamStringValue("typeName");
+		return expenseTypeDao.replaceInto(typeName);
 	}
 
 

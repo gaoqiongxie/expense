@@ -25,7 +25,7 @@ public class ExpenseController extends BaseController{
 	ExpenseService expenseService;
 
 	/**
-	 * 1.获取角色
+	 * 1. 获取角色
 	 * @return
 	 */
 	@RequestMapping("/members")
@@ -35,7 +35,18 @@ public class ExpenseController extends BaseController{
 	}
 	
 	/**
-	 * 2.获取支出类别
+	 * 1.1 新增角色
+	 * @return
+	 */
+	@RequestMapping("/member")
+	public APIResult member() {
+		initParams();
+		int count = expenseService.addMember(this.apiRequest);
+		return new APIResult(count);
+	}
+	
+	/**
+	 * 2. 获取支出类别
 	 * @return
 	 */
 	@RequestMapping("/types")
@@ -45,7 +56,18 @@ public class ExpenseController extends BaseController{
 	}
 	
 	/**
-	 * 3.获取支出
+	 * 2.1 新增支出类别
+	 * @return
+	 */
+	@RequestMapping("/type")
+	public APIResult type() {
+		initParams();
+		int count = expenseService.addType(this.apiRequest);
+		return new APIResult(count);
+	}
+	
+	/**
+	 * 3. 获取支出
 	 * @return
 	 */
 	@RequestMapping("/expenses")
@@ -55,7 +77,7 @@ public class ExpenseController extends BaseController{
 	}
 	
 	/**
-	 * 3.1支出分类
+	 * 3.1 支出分类
 	 * @return
 	 */
 	@RequestMapping(value="/expenses/group", method=RequestMethod.GET)
@@ -65,7 +87,7 @@ public class ExpenseController extends BaseController{
 	}
 	
 	/**
-	 * 3.2新增、修改支出
+	 * 3.2 新增、修改支出
 	 * @return
 	 */
 	@RequestMapping("/expense")
@@ -75,7 +97,7 @@ public class ExpenseController extends BaseController{
 	}
 
 	/**
-	 * 3.3根据id获取支出
+	 * 3.3 根据id获取支出
 	 * @param id
 	 * @return
 	 */
@@ -86,7 +108,7 @@ public class ExpenseController extends BaseController{
 	}
 	
 	/**
-	 * 3.4获取月支出总额
+	 * 3.4 获取月支出总额
 	 * @return
 	 */
 	@RequestMapping("/monthInfo")
@@ -95,12 +117,22 @@ public class ExpenseController extends BaseController{
 	}
 	
 	/**
-	 * 导出excel账单
+	 * 3.5 导出excel账单
 	 * @param response
 	 */
 	@RequestMapping(value="/expenses/export", method=RequestMethod.POST)
 	public void exportList(HttpServletResponse response) {
 		initParams();
 		expenseService.exportList(this.apiRequest, response);
+	}
+	
+	/**
+	 * 3.6 支出分类
+	 * @return
+	 */
+	@RequestMapping(value="/expenses/tree", method=RequestMethod.GET)
+	public APIResult treeExpenses() {
+		initParams();
+		return new APIResult(expenseService.treeExpenses(this.apiRequest));
 	}
 }

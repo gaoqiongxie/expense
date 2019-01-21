@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>report</title>
+<link rel="stylesheet" type="text/css" href="../scripts/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="../scripts/easyui/themes/icon.css">
+
+<script type="text/javascript" src="../scripts/easyui/jquery.min.js"></script>
+<script type="text/javascript" src="../scripts/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../scripts/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../scripts/common.js"></script>
+<script src="https://cdn.bootcss.com/echarts/4.0.4/echarts.min.js"></script>
+
+<script type="text/javascript" src="js/report_scroll_sunburst.js"></script>
+<style type="text/css">
+body {
+	height: 1200px;
+} 
+
+.main {
+	position: fixed;
+	left: 0;
+	top: 0;
+	height: 100%; 
+	width: 100%;
+}
+
+.div-square-left{
+	float:left;
+	left: 1; 
+	display:inline;
+	width: 100%;
+	margin: 0 auto;
+	height: 100%;
+	box-sizing: border-box;
+}
+
+</style>
+
+</head>
+<body>
+	<div class="main">
+		<div class="div-square-left" id="bar1"></div>
+	</div>
+</body>
+</html>

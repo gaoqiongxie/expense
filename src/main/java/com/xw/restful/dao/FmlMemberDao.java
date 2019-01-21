@@ -8,4 +8,6 @@ public interface FmlMemberDao {
 
 	List<FmlMember> fmlMembers();
 
+	int replaceInto(String memberName);
+
 }

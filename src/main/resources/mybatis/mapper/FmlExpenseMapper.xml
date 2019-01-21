@@ -42,6 +42,14 @@
 		</collection>
 	</resultMap>
 	
+	<resultMap type="com.xw.restful.domain.vo.MonthExpense" id="monthExpense">
+		<result column="month" property="month" jdbcType="VARCHAR" />
+		<result column="expense_name" property="expenseName" jdbcType="INTEGER" />
+		<result column="payer" property="payer" jdbcType="VARCHAR" />
+		<result column="expense" property="expense" jdbcType="FLOAT" />
+		<result column="type_name" property="typeName" jdbcType="VARCHAR" />
+	</resultMap>
+	
 	<insert id="insert" parameterType="fmlExpense">
 		insert into fml_expense(member_id,payer_id,expense,expense_type,expense_desc,expense_time)
 		value(#{expenseId},#{payerId},#{expense},#{expenseType},#{expenseDesc},#{expenseTime})
@@ -160,5 +168,15 @@
 		<if test="groupByMonth">
 			,date_format(expense_time, '%Y-%m')
 		</if>
+	</select>
+	
+	<select id="monthExpense" resultMap="monthExpense">
+		select p.name payer, m.name expense_name, t.type_name type_name,sum(expense) expense,date_format(expense_time, '%Y-%m') month
+		from fml_expense d 
+			left join fml_member m on d.member_id=m.id
+			left join fml_member p on d.payer_id=p.id  
+			left join expense_type t on d.expense_type=t.type_id
+		where data_state='init'
+		group by date_format(expense_time, '%Y-%m'),d.payer_id,d.member_id,d.expense_type
 	</select>
 </mapper>

@@ -7,8 +7,21 @@
 		<result column="type_name" property="typeName" jdbcType="VARCHAR" />
 	</resultMap>
 	
+	<sql id="Base_Column_List">
+		type_id, type_name
+	</sql>
+	<sql id="table">expense_type</sql>
+	
 	<select id="getFmlExpenseTypes" resultMap="expenseType">
-		select type_id,type_name from expense_type
+		select <include refid="Base_Column_List" />  from <include refid="table" />
 	</select>
 
+	<insert id="replaceInto">
+		INSERT INTO <include refid="table" />(type_name) 
+		SELECT #{typeName} 
+		FROM DUAL 
+		WHERE NOT EXISTS(
+			SELECT type_name FROM <include refid="table" /> WHERE type_name = #{typeName}
+		);
+	</insert>
 </mapper>

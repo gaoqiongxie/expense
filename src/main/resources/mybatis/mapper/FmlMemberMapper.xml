@@ -16,5 +16,14 @@
 		select <include refid="Base_Column_List" /> 
 		from <include refid="table" />
 	</select>
+	
+	<insert id="replaceInto">
+		INSERT INTO <include refid="table" />(name) 
+		SELECT #{memberName} 
+		FROM DUAL 
+		WHERE NOT EXISTS(
+			SELECT name FROM <include refid="table" /> WHERE name = #{memberName}
+		);
+	</insert>
 
 </mapper>
