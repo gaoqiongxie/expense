@@ -8,3 +8,16 @@
 > 还想要有图标，看上去对比明显<br/><br/>
 
 > 相当一部分代码借鉴hmc代码库、搜索引擎，感谢贡献者们<br/>
+
+
+## 系统参数配置
+```
+MYSQL_HOST
+MYSQL_PORT
+MYSQL_DB_NAME
+MYSQL_DB_USERNAME
+MYSQL_DB_PASSWORD
+LOG4J_INFO_FILE_PATH
+LOG4J_ERROE_FILE_PATH
+LOG4J_DEBUG_FILE_PATH
+```
