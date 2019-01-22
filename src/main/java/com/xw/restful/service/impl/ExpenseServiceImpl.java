@@ -56,6 +56,7 @@ public class ExpenseServiceImpl implements ExpenseService{
 
 	@Override
 	public Page getFmlExpenses(APIRequest apiRequest) {
+		logger.info("test");
 		ParamDataEntity paramDataEntity = new ParamDataEntity(apiRequest);
 		int pageN = paramDataEntity.GetParamIntValue("page", 1);
 		int rows = paramDataEntity.GetParamIntValue("rows", 10);
