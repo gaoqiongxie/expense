@@ -29,7 +29,7 @@ server:
    session: 
       timeout: 10
    tomcat: 
-      uri-encoding:UTF-8
+      uri-encoding: UTF-8
 
 # mybatis
 mybatis: 
