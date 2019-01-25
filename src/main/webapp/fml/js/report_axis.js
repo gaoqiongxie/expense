@@ -2,7 +2,7 @@ $(function() {
 	var dataOrderByExpens, dataOrderByPayer, dataOrderByType;
 	$.get("/expenses/group?groupBy=expenseId",function(data,status){
 		dataOrderByExpense=data.data;
-		var myChart = echarts.init(document.getElementById("bar3"));
+		var myChart = echarts.init(document.getElementById("bar2"),'light');
 		myChart.clear();
 		option = getOptions(dataOrderByExpense, "expenseId")
 		if (option && typeof option === "object") {
@@ -12,7 +12,7 @@ $(function() {
 	
 	$.get("/expenses/group?groupBy=payerId",function(data,status){
 		dataOrderByPayerId=data.data;
-		var myChart = echarts.init(document.getElementById("bar2"));
+		var myChart = echarts.init(document.getElementById("bar1"));
 		myChart.clear();
 		option = getOptions(dataOrderByPayerId, "payerId")
 		if (option && typeof option === "object") {
@@ -22,7 +22,7 @@ $(function() {
 	
 	$.get("/expenses/group?groupBy=typeId",function(data,status){
 		dataOrderByTypeId=data.data;
-		var myChart = echarts.init(document.getElementById("bar1"));
+		var myChart = echarts.init(document.getElementById("bar3"));
 		myChart.clear();
 		option = getOptions(dataOrderByTypeId, "typeId")
 		if (option && typeof option === "object") {
@@ -44,6 +44,8 @@ function getOptions(dataSource, type) {
 	    },
 	    tooltip : {
 	        trigger: 'axis'
+//	    	trigger:'item'//只显示选中
+	    	
 	    },
 	    legend: {
 	        data:legendData
@@ -69,8 +71,8 @@ function getOptions(dataSource, type) {
 	            type : 'value'
 	        }
 	    ],
-	    series : seriesData,
-	    color:getColor(dataSource[0].groupKey)
+	    series : seriesData/*,
+	    color:getColor(dataSource[0].groupKey)*/
 	};
 	
 	return option;
@@ -166,12 +168,18 @@ function seriesInit(name, data){
 	serie.name=name;
 	serie.type='bar';
 	serie.data=data;
-	serie.markPoint={
-            data : [
-                {type : 'max', name: '最大值'},
-                {type : 'min', name: '最小值'}
-            ]
-        };
+//	serie.markPoint={
+//            data : [
+//                {type : 'max', name: '最大值'},
+//                {type : 'min', name: '最小值'}
+//            ]
+//        };
+	serie.label={
+			normal:{
+				show:true,
+				position:'top'
+			}
+	};
 	serie.markLine={
             data : [
                 {type : 'average', name: '平均值'}

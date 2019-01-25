@@ -2,7 +2,7 @@ $(function() {
 	var dataOrderByExpens, dataOrderByPayer, dataOrderByType;
 	$.get("/expenses/group?groupBy=expenseId&groupByMonth=false",function(data,status){
 		dataOrderByExpense=data.data;
-		var myChart = echarts.init(document.getElementById("bar3"));
+		var myChart = echarts.init(document.getElementById("bar2"),'light');
 		myChart.clear();
 		option = getOptions(dataOrderByExpense, "expenseId")
 		if (option && typeof option === "object") {
@@ -12,7 +12,7 @@ $(function() {
 	
 	$.get("/expenses/group?groupBy=payerId&groupByMonth=false",function(data,status){
 		dataOrderByPayerId=data.data;
-		var myChart = echarts.init(document.getElementById("bar2"));
+		var myChart = echarts.init(document.getElementById("bar1"));
 		myChart.clear();
 		option = getOptions(dataOrderByPayerId, "payerId")
 		if (option && typeof option === "object") {
@@ -22,7 +22,7 @@ $(function() {
 	
 	$.get("/expenses/group?groupBy=typeId&groupByMonth=false",function(data,status){
 		dataOrderByTypeId=data.data;
-		var myChart = echarts.init(document.getElementById("bar1"));
+		var myChart = echarts.init(document.getElementById("bar3"));
 		myChart.clear();
 		option = getOptions(dataOrderByTypeId, "typeId")
 		if (option && typeof option === "object") {
@@ -70,8 +70,8 @@ function getOptions(dataSource, type) {
 	                }
 	            }
 	        }
-	    ],
-	    color:getColor(dataSource[0].groupKey)
+	    ]/*,
+	    color:getColor(dataSource[0].groupKey)*/
 	};
 	
 	return option;
