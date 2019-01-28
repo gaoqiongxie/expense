@@ -17,10 +17,10 @@
 
 	<dependencies>
 		<!-- spring -->
-		<dependency>
+	<!-- 	<dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
-        </dependency>
+        </dependency> -->
 	
 		<!-- boot -->
 		<dependency>
@@ -65,11 +65,11 @@
 			<version>1.3.2</version>
 		</dependency>
 
-		<dependency>
+	<!-- 	<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>org.springframework.beans</artifactId>
 			   <version>3.1.0.RELEASE</version>
-		</dependency>
+		</dependency> -->
 		
 		<!-- log4j -->
 	    <dependency>
