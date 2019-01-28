@@ -99,6 +99,15 @@ public class ReadExcelUtils {
 	}
 	
 	/**
+	 * 读取全部列
+	 * @return
+	 */
+	public List<String[]> readExcel() {
+		if(!isInit) init();
+		return listData;
+	}
+	
+	/**
 	 * 初始化
 	 */
 	private void init() {

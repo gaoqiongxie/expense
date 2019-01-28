@@ -14,6 +14,7 @@ public class ExcelUtilTest{
 
 		ReadExcelUtils eh = new ReadExcelUtils("f://excel/fml_expense_1548654298596.xlsx");
 //		eh.setEndcolumnNum(3);
+//		eh.setStartRowNum(100);
 		//支出人	支付人	支出金额	支出类型	支出时间	备注
 		
 		System.out.println("-----------------通过指定行列读取单元格值----------------------------------");
@@ -22,7 +23,7 @@ public class ExcelUtilTest{
 		System.out.println("-------------------通过指定的列名读取单元格值-------------------------------");
 		String[] HeaderNanames = { "支出人", "支付人", "支出金额","支出类型","支出时间","备注"};
 		List<String[]> list = eh.readExcel(HeaderNanames);
-        //List<String[]> list = eh.readExcel();
+//        List<String[]> list = eh.readExcel();
 		String[] strs = null;
 		for (int i = 0; i < list.size(); i++) {
 			strs = (String[]) list.get(i);
