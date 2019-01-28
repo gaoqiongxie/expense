@@ -47,7 +47,7 @@ public class ExcelUtilTest extends ExpenseApplicationTests {
 		try {
 			ReadExcelUtils eh = new ReadExcelUtils("f://excel/fml_expense_1548654298596.xlsx");
 
-			System.out.println("-------------------通过指定的列名读取单元格值-------------------------------");
+			System.out.println("-------------------通过读取全部单元格值-------------------------------");
 			List<String[]> list = eh.readExcel();
 			
 			String[] strs = null;
