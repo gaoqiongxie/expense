@@ -27,11 +27,18 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.xw.restful.anotation.ExcelExport;
 
-public class ExcelUtils {
-	private static Logger logger = Logger.getLogger(ExcelUtils.class);
+public class WriteExcelUtils {
+	private static Logger logger = Logger.getLogger(WriteExcelUtils.class);
 	
 	private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
+	/**
+	 * 生成excle T支持实体 或者Map
+	 * @param sheetName
+	 * @param dataList
+	 * @param config
+	 * @return
+	 */
 	public static <T> XSSFWorkbook producedExcel(String sheetName,List<T> dataList,String config) {
 		if(StringUtils.isEmpty(sheetName) || dataList==null || dataList.size()==0){
 			return null;
@@ -62,7 +69,7 @@ public class ExcelUtils {
 	 * @param colWidthsMap
 	 * @return
 	 */
-	public static XSSFWorkbook createWorkbook(String sheetName,List<String> headerValusNickNames,Map<String, Integer> colWidthsMap) {
+	private static XSSFWorkbook createWorkbook(String sheetName,List<String> headerValusNickNames,Map<String, Integer> colWidthsMap) {
         XSSFWorkbook sfwb =new XSSFWorkbook();
 		 
 	    //拿到excel中的第一个sheet
@@ -123,7 +130,7 @@ public class ExcelUtils {
 	 * @param headerValusNickNames
 	 * @param colWidthsMap
 	 */
-	public static <T> void initProperty(String config,List<String> headerValues,List<String> headerValusNickNames,Map<String, Integer> colWidthsMap){
+	private static <T> void initProperty(String config,List<String> headerValues,List<String> headerValusNickNames,Map<String, Integer> colWidthsMap){
 		String[] headers =config.split(",");
 		 for (int i = 0; i < headers.length; i++) {
 			 //解析 {"学生姓名","userName","15"}
@@ -142,7 +149,7 @@ public class ExcelUtils {
 	 * @param headerValues
 	 */
 	@SuppressWarnings({ "unchecked" })
-	public static <T> void wirte(List<T> dataList,XSSFWorkbook xSSFWorkbook,List<String> headerValues){
+	private static <T> void wirte(List<T> dataList,XSSFWorkbook xSSFWorkbook,List<String> headerValues){
 		// 设置内容样式
 	    XSSFCellStyle contentStyle = xSSFWorkbook.createCellStyle(); 
 	    setCellStyle(contentStyle,"content",true);
@@ -190,7 +197,7 @@ public class ExcelUtils {
 	 * @param headerValusNickNames
 	 * @param colWidthsMap
 	 */
-	public static <T> void initProperty(T t,List<String> headerValues,List<String> headerValusNickNames,Map<String, Integer> colWidthsMap){
+	private static <T> void initProperty(T t,List<String> headerValues,List<String> headerValusNickNames,Map<String, Integer> colWidthsMap){
 		List<Integer> sorts = new ArrayList<Integer>();
 		Map<Integer,String> sortHeaderValues = new HashMap<Integer,String>();
 		Map<Integer,String> sortHeaderValuesNickNames = new HashMap<Integer,String>();
@@ -225,7 +232,7 @@ public class ExcelUtils {
 	 * @param t
 	 * @return
 	 */
-	public static <T> List<Field> getFields(T t){
+	private static <T> List<Field> getFields(T t){
 		Class<?> classInfo = t.getClass();
 		List<Field> fieldList = new ArrayList<Field>();
 		fieldList.addAll(Arrays.asList(classInfo.getDeclaredFields()));

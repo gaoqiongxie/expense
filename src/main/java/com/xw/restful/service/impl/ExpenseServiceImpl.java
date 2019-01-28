@@ -31,7 +31,7 @@ import com.xw.restful.stdo.APIRequest;
 import com.xw.restful.utils.BaseUtils;
 import com.xw.restful.utils.ListUtils;
 import com.xw.restful.utils.ParamDataEntity;
-import com.xw.restful.utils.excel.ExcelUtils;
+import com.xw.restful.utils.excel.WriteExcelUtils;
 
 @Component("expenseService")
 @Service
@@ -126,10 +126,10 @@ public class ExpenseServiceImpl implements ExpenseService{
 		List<ExpenseVO> expenses = getExpensesList(apiRequest);
 		if(expenses.size()<1) return;
 		
-        XSSFWorkbook xSSFWorkbook =  ExcelUtils.producedExcel("fml_expense",expenses,
+        XSSFWorkbook xSSFWorkbook =  WriteExcelUtils.producedExcel("fml_expense",expenses,
         		"支出人:expenseName:20,支付人:payer:20,支出金额:expense:20,支出类型:typeName:20,支出时间:expenseTime:20,备注:expenseDesc:20");
         try {
-        	ExcelUtils.renderExcel(response, xSSFWorkbook, "fml_expense_"+System.currentTimeMillis()+".xlsx");
+        	WriteExcelUtils.renderExcel(response, xSSFWorkbook, "fml_expense_"+System.currentTimeMillis()+".xlsx");
         } catch (IOException e) {
             e.printStackTrace();
         }
