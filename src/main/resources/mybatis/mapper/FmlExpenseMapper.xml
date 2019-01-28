@@ -55,6 +55,13 @@
 		value(#{expenseId},#{payerId},#{expense},#{expenseType},#{expenseDesc},#{expenseTime})
 	</insert>
 	
+	<insert id="insertBatch" parameterType="java.util.List" >
+		insert into fml_expense(member_id,payer_id,expense,expense_type,expense_desc,expense_time)
+		values <foreach collection ="list" item="fmlExpense" index= "index" separator =",">
+                (#{expenseId},#{payerId},#{expense},#{expenseType},#{expenseDesc},#{expenseTime})
+            </foreach >
+	</insert>
+	
 	<update id="update" parameterType="fmlExpense">
 		update fml_expense set member_id=#{expenseId}, payer_id=#{payerId}, expense=#{expense}, 
 		expense_type=#{expenseType}, expense_desc=#{expenseDesc}, expense_time=#{expenseTime} 

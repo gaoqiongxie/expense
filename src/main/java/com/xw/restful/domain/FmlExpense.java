@@ -101,4 +101,11 @@ public class FmlExpense implements Serializable{
 		this.recordId = recordId;
 	}
 
+	@Override
+	public String toString() {
+		return "FmlExpense [recordId=" + recordId + ", expenseId=" + expenseId + ", payerId=" + payerId + ", expense="
+				+ expense + ", expenseType=" + expenseType + ", expenseDesc=" + expenseDesc + ", expenseTime="
+				+ expenseTime + ", dataState=" + dataState + ", updateTime=" + updateTime + "]";
+	}
+
 }

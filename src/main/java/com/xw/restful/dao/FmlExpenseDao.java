@@ -31,4 +31,6 @@ public interface FmlExpenseDao {
 
 	List<MonthExpense> monthExpense();
 
+	int insertBatch(List<FmlExpense> fmlEList);
+
 }
