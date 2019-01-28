@@ -98,6 +98,12 @@
 		<dependency>
 			<groupId>net.sf.json-lib</groupId>
 			<artifactId>json-lib-ext-spring</artifactId>
+			<exclusions>
+				<exclusion>
+		        	<groupId>javax.servlet</groupId>
+	                <artifactId>servlet-api</artifactId>
+		        </exclusion>
+	        </exclusions>
 			<version>1.0.2</version>
 		</dependency>
 		
