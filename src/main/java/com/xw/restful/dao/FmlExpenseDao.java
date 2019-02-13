@@ -27,7 +27,7 @@ public interface FmlExpenseDao {
 
 	float sumExpenseMonth();
 
-	List<GroupExpenseVO> groupExpenses(GroupExpenseVO groupExpenseVO);
+	List<GroupExpenseVO> groupExpenses(Map<String, Object> paMap);
 
 	List<MonthExpense> monthExpense();
 

@@ -10,7 +10,7 @@ $(function() {
 	$("#expenseList").datagrid({
 		title : '家庭支出',
 		width: $(window).width()*1,
-		height:$(window).height()*0.5,
+		height:$(window).height()*0.8,
 		iconCls : 'icon-save',
 		fitColumns :true,
 		striped : true,
@@ -256,7 +256,41 @@ $(function() {
 		$('<form method="post" action="' + url + '"></form>').appendTo('body').submit().remove();
 	});
 	
+//	
+	$("#reportButton").click(function(){
+		var sExpense=$("#sExpense").combobox('getValue');
+		var sPayer=$("#sPayer").combobox('getValue');
+		var sType=$("#sType").combobox('getValue');
+		
+		var startTime = $('#startTime').datebox('getValue');	// 得到 datebox值
+		var endTime = $('#endTime').datebox('getValue');	// 得到 datebox值
+		
+		reportDlg(sExpense,sPayer,sType,startTime,endTime);
+	});
+	
+	$('#report_Dlg').dialog({
+		title:'家庭支出对比图',
+		width: $(window).width()*1,
+		height:$(window).height()*0.9,
+		iconCls:'icon-save',
+		closed: true,
+		modal:true,
+		resizable:true,
+		buttons:[],
+		onOpen:function(){
+		},
+		onClose:function(){
+		}
+	});
 });
+
+function reportDlg(sExpense,sPayer,sType,startTime,endTime){
+	$("#report_scroll_pie_iframe").attr("src","report_scroll_pie.html?sExpense="+sExpense+"&sPayer="+sPayer
+			+"&sType="+sType+"&startTime="+startTime+"&endTime="+endTime);
+	$("#report_iframe").attr("src","report_axis.html?sExpense="+sExpense+"&sPayer="+sPayer
+			+"&sType="+sType+"&startTime="+startTime+"&endTime="+endTime);
+	$('#report_Dlg').dialog('open');
+}
 
 function compute(data){
 	var rows = data.rows//获取当前的数据行

@@ -159,11 +159,27 @@ public class ExpenseServiceImpl implements ExpenseService{
 		String groupBy = paramDataEntity.GetParamStringValue("groupBy", "typeId");
 		boolean groupByMonth = paramDataEntity.GetParamBoolValue("groupByMonth", true);
 		
-		GroupExpenseVO groupVo = new GroupExpenseVO();
-		groupVo.setGroupKey(groupBy);
-		groupVo.setGroupByMonth(groupByMonth);
+		String expenseId = paramDataEntity.GetParamStringValue("sExpense", null);
+		String payerId = paramDataEntity.GetParamStringValue("sPayer", null);
+		String typeId = paramDataEntity.GetParamStringValue("sType", null);
 		
-		List<GroupExpenseVO> expenses = fmlExpenseDao.groupExpenses(groupVo);
+		String startTime = paramDataEntity.GetParamStringValue("startTime", null);
+		String endTime = paramDataEntity.GetParamStringValue("endTime", null);
+		
+//		GroupExpenseVO groupVo = new GroupExpenseVO();
+//		groupVo.setGroupKey(groupBy);
+//		groupVo.setGroupByMonth(groupByMonth);
+		
+		Map<String, Object> paMap = new HashMap<String, Object>();
+		paMap.put("groupKey", groupBy);
+		paMap.put("groupByMonth", groupByMonth);
+		paMap.put("expenseId", expenseId);
+		paMap.put("payerId", payerId);
+		paMap.put("typeId", typeId);
+		paMap.put("startTime", startTime);
+		paMap.put("endTime", endTime);
+		
+		List<GroupExpenseVO> expenses = fmlExpenseDao.groupExpenses(paMap);
 		
 		return expenses;
 	}

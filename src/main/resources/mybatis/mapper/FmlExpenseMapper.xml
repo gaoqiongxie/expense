@@ -142,7 +142,7 @@
 		where data_state='init' and DATE_FORMAT( expense_time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
 	</select>
 	
-	<select id="groupExpenses" resultMap="groupExpenseVO" parameterType="groupExpenseVO">
+	<select id="groupExpenses" resultMap="groupExpenseVO">
 		select <choose>
 				<when test="groupKey=='expenseId'">
 					m.name
@@ -159,7 +159,22 @@
 			left join fml_member m on d.member_id=m.id
 			left join fml_member p on d.payer_id=p.id  
 			left join expense_type t on d.expense_type=t.type_id
-		where data_state='init'
+		where data_state='init' 
+			<if test="expenseId != null and expenseId != ''">
+				and d.member_id=#{expenseId}
+			</if>
+			<if test="payerId != null and payerId != ''">
+				and d.payer_id=#{payerId}
+			</if>
+			<if test="typeId != null and typeId != ''">
+				and d.expense_type=#{typeId}
+			</if>
+			<if test="startTime != null and startTime != ''">
+				and d.expense_time&gt;=#{startTime}
+			</if>
+			<if test="endTime != null and endTime != ''">
+				and d.expense_time&lt;=#{endTime}
+			</if>
 		group by 
 		<choose>
 			<when test="groupKey=='expenseId'">

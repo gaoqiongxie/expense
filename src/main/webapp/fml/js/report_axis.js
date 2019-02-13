@@ -1,6 +1,16 @@
+var sExpense=getQueryString("sExpense");
+var sPayer=getQueryString("sPayer");
+var sType=getQueryString("sType");
+
+var startTime = getQueryString("startTime");	
+var endTime = getQueryString("endTime");	
+
+var title=(startTime&&endTime?(startTime+'至'+endTime):(startTime?startTime+'起':(endTime?'至'+endTime:'2019年')))+'家庭总支出';
+
 $(function() {
+	var qureyData = "&sExpense="+sExpense+"&sPayer="+sPayer+"&sType="+sType+"&startTime="+startTime+"&endTime="+endTime;
 	var dataOrderByExpens, dataOrderByPayer, dataOrderByType;
-	$.get("/expenses/group?groupBy=expenseId",function(data,status){
+	$.get("/expenses/group?groupBy=expenseId"+qureyData,function(data,status){
 		dataOrderByExpense=data.data;
 		var myChart = echarts.init(document.getElementById("bar2"),'light');
 		myChart.clear();
@@ -10,7 +20,7 @@ $(function() {
 		}
 	});
 	
-	$.get("/expenses/group?groupBy=payerId",function(data,status){
+	$.get("/expenses/group?groupBy=payerId"+qureyData,function(data,status){
 		dataOrderByPayerId=data.data;
 		var myChart = echarts.init(document.getElementById("bar1"));
 		myChart.clear();
@@ -20,7 +30,7 @@ $(function() {
 		}
 	});
 	
-	$.get("/expenses/group?groupBy=typeId",function(data,status){
+	$.get("/expenses/group?groupBy=typeId"+qureyData,function(data,status){
 		dataOrderByTypeId=data.data;
 		var myChart = echarts.init(document.getElementById("bar3"));
 		myChart.clear();
@@ -39,7 +49,7 @@ function getOptions(dataSource, type) {
 	option = null;
 	option = {
 	    title : {
-	        text: '2019年家庭总支出',
+	        text: title,
 	        subtext: '依据'+getType(dataSource[0].groupKey)+'统计'
 	    },
 	    tooltip : {

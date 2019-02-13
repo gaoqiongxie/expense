@@ -1,6 +1,8 @@
 package com.xw.test.expense;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.junit.Test;
@@ -30,13 +32,19 @@ public class ExpenseTest extends ExpenseApplicationTests{
 	
 	@Test
 	public void testGroupExpense() {
-		GroupExpenseVO groupVo = new GroupExpenseVO();
-		groupVo.setGroupKey("typeId");
-		List<GroupExpenseVO> listByType = fmlExpenseDao.groupExpenses(groupVo);
-		groupVo.setGroupKey("expenseId");
-		List<GroupExpenseVO> listByExpense = fmlExpenseDao.groupExpenses(groupVo);
-		groupVo.setGroupKey("payerId");
-		List<GroupExpenseVO> listByPayer = fmlExpenseDao.groupExpenses(groupVo);
+		Map<String, Object> paMap = new HashMap<String, Object>();
+		paMap.put("expenseId", null);
+		paMap.put("payerId", null);
+		paMap.put("typeId", null);
+		paMap.put("startTime", "2019-02-01");
+		paMap.put("endTime", null);
+		
+		paMap.put("groupKey", "typeId");
+		List<GroupExpenseVO> listByType = fmlExpenseDao.groupExpenses(paMap);
+		paMap.put("groupKey", "expenseId");
+		List<GroupExpenseVO> listByExpense = fmlExpenseDao.groupExpenses(paMap);
+		paMap.put("groupKey", "payerId");
+		List<GroupExpenseVO> listByPayer = fmlExpenseDao.groupExpenses(paMap);
 		
 		System.out.println("根据支出类别分组：");
 		System.out.println(BaseUtils.toJSONString(listByType));
