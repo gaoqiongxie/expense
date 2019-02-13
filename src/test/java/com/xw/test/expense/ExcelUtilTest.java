@@ -19,7 +19,7 @@ public class ExcelUtilTest extends ExpenseApplicationTests {
 
 	@Test
 	public void testRead() {
-		ReadExcelUtils eh = new ReadExcelUtils("f://excel/fml_expense_1548654298596.xlsx");
+		ReadExcelUtils eh = new ReadExcelUtils("F://xuanwo/defray/fml_expense_newyear.xlsx");
 		// eh.setEndcolumnNum(3);
 		// eh.setStartRowNum(100);
 		// 支出人 支付人 支出金额 支出类型 支出时间 备注
@@ -45,7 +45,7 @@ public class ExcelUtilTest extends ExpenseApplicationTests {
 	public void importExpenseData() {
 
 		try {
-			ReadExcelUtils eh = new ReadExcelUtils("f://excel/fml_expense_1548654298596.xlsx");
+			ReadExcelUtils eh = new ReadExcelUtils("F://xuanwo/defray/fml_expense_newyear.xlsx");
 
 			System.out.println("-------------------通过读取全部单元格值-------------------------------");
 			List<String[]> list = eh.readExcel();
@@ -54,7 +54,7 @@ public class ExcelUtilTest extends ExpenseApplicationTests {
 			FmlExpense e = null;
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			List<FmlExpense> fmlEList = new ArrayList<FmlExpense>();
-			
+			System.out.println("excel size "+(list.size()-1));
 			for (int i = 1; i < list.size(); i++) {
 				strs = (String[]) list.get(i);
 				e = new FmlExpense();
@@ -69,7 +69,8 @@ public class ExcelUtilTest extends ExpenseApplicationTests {
 				fmlEList.add(e);
 			}
 			
-//			fmlExpenseDao.insertBatch(fmlEList);
+			System.out.println("fmlEList size "+fmlEList.size());
+			fmlExpenseDao.insertBatch(fmlEList);
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		} catch (ParseException e) {

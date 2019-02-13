@@ -38,7 +38,7 @@ function getOptions(dataSource, type) {
 	option = null;
 	option = {
 	    title : {
-	        text: '2019年1月起家庭总支出',
+	        text: '2019年家庭总支出',
 	        subtext: '依据'+getType(dataSource[0].groupKey)+'统计',
 	        x:'center'
 	    },

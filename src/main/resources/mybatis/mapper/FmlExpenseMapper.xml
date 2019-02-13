@@ -58,7 +58,7 @@
 	<insert id="insertBatch" parameterType="java.util.List" >
 		insert into fml_expense(member_id,payer_id,expense,expense_type,expense_desc,expense_time)
 		values <foreach collection ="list" item="fmlExpense" index= "index" separator =",">
-                (#{expenseId},#{payerId},#{expense},#{expenseType},#{expenseDesc},#{expenseTime})
+                (#{fmlExpense.expenseId},#{fmlExpense.payerId},#{fmlExpense.expense},#{fmlExpense.expenseType},#{fmlExpense.expenseDesc},#{fmlExpense.expenseTime})
             </foreach >
 	</insert>
 	
