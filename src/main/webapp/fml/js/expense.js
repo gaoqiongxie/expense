@@ -305,6 +305,7 @@ function compute(data){
     	;
 	 var length = rows.length;
     for (var i = 0; i < length; i++) {
+    	if (rows[i]['dataState']!='init') continue;
     	if(expenseName.indexOf(rows[i]['expenseName'])<0)
     		expenseName += rows[i]['expenseName']+"_";
     	if(payer.indexOf(rows[i]['payer'])<0)
