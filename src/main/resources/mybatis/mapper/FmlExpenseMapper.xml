@@ -121,7 +121,7 @@
 			<if test="endTime != null">
 				and d.expense_time&lt;=#{endTime}
 			</if>
-		order by id desc 
+		order by expense_time desc 
 		<if test="pageSize != null and pageSize != 0">
 			limit #{page},#{pageSize}
 		</if>
