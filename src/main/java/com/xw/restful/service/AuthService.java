@@ -6,4 +6,6 @@ public interface AuthService {
 
 	Object login(APIRequest apiRequest);
 
+	Object logout(APIRequest apiRequest);
+
 }

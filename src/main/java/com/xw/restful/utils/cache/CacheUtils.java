@@ -4,7 +4,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.log4j.Logger;
+
 public class CacheUtils {
+	
+	private static Logger logger = Logger.getLogger(CacheUtils.class);
 	
 	@SuppressWarnings("rawtypes")
 	private static Map<String, CacheData> CACHE_DATA = new ConcurrentHashMap<>();
@@ -52,12 +56,31 @@ public class CacheUtils {
         CACHE_DATA.put(key,new CacheData(data,expire));
     }
     
-    public static void clear(String key){
+  	@SuppressWarnings("rawtypes")
+	public static void clearByToken(String value){
+		for (Entry<String, CacheData> entry : CACHE_DATA.entrySet()) {
+			CacheData data = entry.getValue();
+			if(data != null && (data.getExpire() <= 0 || data.getSaveTime() >= System.currentTimeMillis()) 
+					&& data.data.equals(value)){
+				clearByKey(entry.getKey());
+			}
+		}
+      	
+    }
+    
+    public static void clearByKey(String key){
     	CACHE_DATA.remove(key);
     }
     
     public static void clearAll(){
         CACHE_DATA.clear();
+    }
+    
+    @SuppressWarnings("rawtypes")
+	public static void printf() {
+    	for (Entry<String, CacheData> entry : CACHE_DATA.entrySet()) {
+			logger.info("CACHE_DATA: key-"+entry.getKey()+"  value-"+entry.getValue().toString());
+        }
     }
     
     public interface Load<T>{
@@ -82,6 +105,11 @@ public class CacheUtils {
         public long getSaveTime() {
             return saveTime;
         }
+		@Override
+		public String toString() {
+			return "CacheData [data=" + data + ", saveTime=" + saveTime + ", expire=" + expire + "]";
+		}
+        
     }
 
 }

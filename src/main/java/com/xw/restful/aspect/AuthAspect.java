@@ -1,5 +1,7 @@
 package com.xw.restful.aspect;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -14,7 +16,10 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.xw.restful.constant.ErrorCodeEnum;
 import com.xw.restful.stdo.APIResult;
+import com.xw.restful.utils.HttpRequestUtils;
 import com.xw.restful.utils.cache.CacheUtils;
+import com.xw.restful.utils.cache.CacheUtils.Load;
+import com.xw.restful.utils.rsa.TOTP;
 
 @Aspect
 @Component
@@ -24,12 +29,14 @@ public class AuthAspect {
 	@Pointcut("execution(public * com.xw.restful.controller..*(..)) && @annotation(com.xw.restful.anotation.Auth)" )
     public void anthorization(){} 
 	
-    @Around("anthorization()")
+    @SuppressWarnings("unchecked")
+	@Around("anthorization()")
     public Object Interceptor(ProceedingJoinPoint pjp){
     	HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
     	String token = request.getHeader("accessToken");
+    	Map<String, Object> dataMap = HttpRequestUtils.getRequestParamters(request);
     	
-    	logger.info("AuthAspect-accessToken-"+token);
+    	logger.info("验证 token 是否合法-accessToken-"+token);
     	//验证 token 是否合法
     	if(StringUtils.isEmpty(token)){
     		return new APIResult(ErrorCodeEnum.NULL_ERROR.getCode(), ErrorCodeEnum.NULL_ERROR.getMsg());

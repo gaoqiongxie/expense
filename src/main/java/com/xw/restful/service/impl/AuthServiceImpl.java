@@ -1,8 +1,13 @@
 package com.xw.restful.service.impl;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.xw.restful.service.AuthService;
 import com.xw.restful.stdo.APIRequest;
@@ -37,5 +42,18 @@ public class AuthServiceImpl implements AuthService {
 	        }, timeout);
 		}
 		return token;
+	}
+
+	@Override
+	public Object logout(APIRequest apiRequest) {
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+		String token = request.getHeader("accessToken");
+    	//验证 token 是否合法
+    	if(!StringUtils.isEmpty(token) && CacheUtils.containsValue(token)){
+    		//
+    		CacheUtils.clearByToken(token);
+    	}
+    	CacheUtils.printf();
+		return null;
 	}
 }

@@ -40,7 +40,7 @@ function login(){
 		    	showProcess(false);
 		       var data = eval('(' + data + ')'); 
 		       if(data.status=='1'){
-		    	   document.cookie = data.data; 
+		    	   document.cookie = data.data;
 		    	   window.location.href="../fml/expense.html";
 	    	   }
 		    }  

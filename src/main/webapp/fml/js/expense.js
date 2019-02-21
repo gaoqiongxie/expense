@@ -282,6 +282,20 @@ $(function() {
 		onClose:function(){
 		}
 	});
+	
+	$("#logOut").bind('click',function(){
+		if(confirm("确认退出登录？")){
+			$.ajax({
+				type:'get',
+				url:'/logout',
+				success:function(data){
+					//TODO 清空缓存
+					window.location.href = "../../login.html";
+				}
+			});
+			
+		}
+	});
 });
 
 function reportDlg(sExpense,sPayer,sType,startTime,endTime){
