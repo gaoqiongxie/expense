@@ -18,8 +18,6 @@ import com.xw.restful.constant.ErrorCodeEnum;
 import com.xw.restful.stdo.APIResult;
 import com.xw.restful.utils.HttpRequestUtils;
 import com.xw.restful.utils.cache.CacheUtils;
-import com.xw.restful.utils.cache.CacheUtils.Load;
-import com.xw.restful.utils.rsa.TOTP;
 
 @Aspect
 @Component
@@ -34,7 +32,6 @@ public class AuthAspect {
     public Object Interceptor(ProceedingJoinPoint pjp){
     	HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
     	String token = request.getHeader("accessToken");
-    	Map<String, Object> dataMap = HttpRequestUtils.getRequestParamters(request);
     	
     	logger.info("验证 token 是否合法-accessToken-"+token);
     	//验证 token 是否合法

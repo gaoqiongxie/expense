@@ -10,8 +10,8 @@ import com.xw.restful.domain.vo.MonthExpense;
 
 public class ListUtils {
 
-	public static List mapToList(Map<String, Map<String, Map<String, Map<String, List<MonthExpense>>>>> groupBy) {
-		List relist = new ArrayList();
+	public static List<Map<String, Object>> mapToList(Map<String, Map<String, Map<String, Map<String, List<MonthExpense>>>>> groupBy) {
+		List<Map<String, Object>> relist = new ArrayList<Map<String, Object>>();
 		groupBy.forEach((k, v) -> {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("name", k);//月
@@ -23,7 +23,7 @@ public class ListUtils {
 	}
 
 	private static Object getPayChild(Map<String, Map<String, Map<String, List<MonthExpense>>>> payV) {//支付人
-		List relist = new ArrayList();
+		List<Map<String, Object>> relist = new ArrayList<Map<String, Object>>();
 		payV.forEach((k, v) -> {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("name", k);//支付人
@@ -35,7 +35,7 @@ public class ListUtils {
 	}
 
 	private static Object getExpenseChild(Map<String, Map<String, List<MonthExpense>>> expenseV) {
-		List relist = new ArrayList();
+		List<Map<String, Object>> relist = new ArrayList<Map<String, Object>>();
 		expenseV.forEach((k, v) -> {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("name", k);//支出人
@@ -47,7 +47,7 @@ public class ListUtils {
 	}
 
 	private static Object getTypeChild(Map<String, List<MonthExpense>> typeV) {
-		List relist = new ArrayList();
+		List<Map<String, Object>> relist = new ArrayList<Map<String, Object>>();
 		typeV.forEach((k, v) -> {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("name", k);//支出类型
