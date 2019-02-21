@@ -1,25 +1,28 @@
-var sysUrl=parent.baseJs;
-
-
+var sysUrl = parent.baseJs;
 //全局监控所有的Ajax请求，对于没有权限或登录失效的ajax访问，踢回到登录页面
 $(function(){
 	$.ajaxSetup({
 		headers: { // 默认添加请求头
 		        "Author": "gaoqiongxie"
 		    },
-	    cache : false,
+	    beforeSend: function(xhr) {
+	    	  xhr.setRequestHeader("accessToken", document.cookie.split(";")[0] );
+	    },
+//	    cache : false,
 	    global : true,
 	    complete: function(req, status) {
 		    try{
-		        var reqObj = eval('('+req.responseText+")");
+		    	var reqObj = eval('('+req.responseText+")");
+		    	console.log(reqObj);
 		        //如果数据请求验证时，对应的请求资源(路径)没有权限(或者没有登录)
-		        if (reqObj && reqObj.noRight) {
-		        	alert("你无权进行该项操作，可能是登录失效，请重新登录！");
-		            window.location.href = reqObj.loginUrl;
+		        if (reqObj && reqObj.errorCode=="0004") {
+		        	$.messager.alert('提示',reqObj.msg,'warning');
+		            window.location.href = "../login.html";
 		        }
-		      }catch(e){}
-		    }
+		     }catch(e){}
+	    }
 	});
+	
 });
 
 /**

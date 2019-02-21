@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.xw.restful.anotation.Auth;
 import com.xw.restful.base.BaseController;
 import com.xw.restful.domain.ExpenseType;
 import com.xw.restful.domain.FmlMember;
@@ -29,6 +30,7 @@ public class ExpenseController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping("/members")
+	@Auth
 	public APIResult members() {
 		List<FmlMember> fmlMemberList = expenseService.getFmlMembers();
 		return new APIResult(fmlMemberList);
@@ -39,6 +41,7 @@ public class ExpenseController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping("/member")
+	@Auth
 	public APIResult member() {
 		initParams();
 		int count = expenseService.addMember(this.apiRequest);
@@ -50,6 +53,7 @@ public class ExpenseController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping("/types")
+	@Auth
 	public APIResult types() {
 		List<ExpenseType> expenseTypes = expenseService.getFmlExpenseTypes();
 		return new APIResult(expenseTypes);
@@ -60,6 +64,7 @@ public class ExpenseController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping("/type")
+	@Auth
 	public APIResult type() {
 		initParams();
 		int count = expenseService.addType(this.apiRequest);
@@ -71,6 +76,7 @@ public class ExpenseController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping("/expenses")
+	@Auth
 	public APIResult expenses() {
 		initParams();
 		return new APIResult(expenseService.getFmlExpenses(this.apiRequest));
@@ -81,6 +87,7 @@ public class ExpenseController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value="/expenses/group", method=RequestMethod.GET)
+	@Auth
 	public APIResult groupExpenses() {
 		initParams();
 		return new APIResult(expenseService.groupExpenses(this.apiRequest));
@@ -91,6 +98,7 @@ public class ExpenseController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping("/expense")
+	@Auth
 	public APIResult expense() {
 		initParams();
 		return new APIResult(expenseService.addOrUpdateExpense(this.apiRequest));
@@ -102,6 +110,7 @@ public class ExpenseController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value="/expense/{id}", method=RequestMethod.GET)
+	@Auth
 	public APIResult getDtoRecordById(@PathVariable("id") String id) {
 		ExpenseVO expenseVO = expenseService.getDtoRecordById(id);
 		return new APIResult(expenseVO);
@@ -112,6 +121,7 @@ public class ExpenseController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping("/monthInfo")
+	@Auth
 	public APIResult monthInfo() {
 		return new APIResult(expenseService.monthInfo());
 	}
@@ -121,6 +131,7 @@ public class ExpenseController extends BaseController{
 	 * @param response
 	 */
 	@RequestMapping(value="/expenses/export", method=RequestMethod.POST)
+	@Auth
 	public void exportList(HttpServletResponse response) {
 		initParams();
 		expenseService.exportList(this.apiRequest, response);
@@ -131,6 +142,7 @@ public class ExpenseController extends BaseController{
 	 * @return
 	 */
 	@RequestMapping(value="/expenses/tree", method=RequestMethod.GET)
+	@Auth
 	public APIResult treeExpenses() {
 		initParams();
 		return new APIResult(expenseService.treeExpenses(this.apiRequest));

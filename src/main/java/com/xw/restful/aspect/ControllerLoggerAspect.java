@@ -22,8 +22,8 @@ import com.xw.restful.utils.NetUtils;
 
 @Aspect
 @Component
-public class ControllerAspect {
-	private static Logger logger = Logger.getLogger(ControllerAspect.class);
+public class ControllerLoggerAspect {
+	private static Logger logger = Logger.getLogger(ControllerLoggerAspect.class);
 	public long startTimeStamp;
 	public long endTimeStamp;
 	Map<String, Object> requestInfosMap = null;
@@ -42,6 +42,9 @@ public class ControllerAspect {
 		String classMethod = getClassMethod(joinPoint);
 		requestInfosMap.put("class_method", classMethod);
 		requestInfosMap.put("thread_id", Thread.currentThread().getId());
+		
+//		String token = request.getHeader("accessToken"); 
+//		requestInfosMap.put("accessToken:", token);
 		logger.info("begin-requestInfosMap:"+requestInfosMap);
 	}
 	
@@ -58,11 +61,13 @@ public class ControllerAspect {
 	}
 	
 	private Map<String, Object> getRequestInfos(HttpServletRequest request) {
+		String token = request.getHeader("accessToken"); 
 		Map<String, Object> map = new LinkedHashMap<String, Object>();
 		map.put("start_time", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date()));
 		map.put("client_iP", NetUtils.getLocalAddress());
 		map.put("request_method", request.getMethod());
 		map.put("data", HttpRequestUtils.getRequestParamters(request));
+		map.put("accessToken", token);
 		return map;
 	}
 	
