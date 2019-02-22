@@ -33,7 +33,17 @@ $(function() {
 		                   {field : 'ck',checkbox : true,align : 'center'} 
 		               ] ],
         loadFilter: function(data){
-	    	return getData(data);
+        	debugger;
+        	var resData;
+        	if(data.errorCode){
+        		resData = {
+        			total: 0,
+        			rows: []
+        		}
+        	}else{
+        		resData = getData(data);
+        	}
+        	return resData;
         },
 		columns : [ [ 
 			 {field : 'expenseName',title : '支出人',width : fillsize(0.20),align : 'center'},
@@ -414,21 +424,20 @@ function checkData(){
 
 function dealDate(){
 	if($('#expenseForm').form('validate')){
-		$('#expenseForm').form('submit',{  
-		    url:'/expense?actionType='+actionType,  
-		    onSubmit: function(){  
-		    },  
-		    success:function(data){ 
-		    	var data = eval('(' + data + ')'); 
+		$.ajax({
+			type: 'post',
+			url: '/expense?actionType='+actionType,  
+			async: false,
+			data: $('#expenseForm').serialize(),
+			success:function(data){
 		        if(data.status){
-//		    	    $.messager.alert('提示',data.msg,'info');
 		    	    clear();
 		    	    closeDialog('expenseDlg');
 		    	    flashTable('expenseList');
 		        } else{
 		    	    $.messager.alert('提示',data.msg,'warning');
 		        }
-		    }  
+			}
 		});
 	}
 }
