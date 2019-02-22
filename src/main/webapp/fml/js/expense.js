@@ -64,6 +64,8 @@ $(function() {
 		var startTime = $('#startTime').datebox('getValue');	// 得到 datebox值
 		var endTime = $('#endTime').datebox('getValue');	// 得到 datebox值
 		
+		var expenseDesc = $("#sexpenseDesc").val();
+		
 		var obj={};
 		if(!isNullStr(sExpense)){
 			obj.sExpense=sExpense;
@@ -80,6 +82,10 @@ $(function() {
 		if(!isNullStr(endTime)){
 			obj.endTime=endTime;
 		}
+		if(!isNullStr(expenseDesc)){
+			obj.expenseDesc=expenseDesc;
+		}
+		
 		
 		$('#expenseList').datagrid('load', obj);
 	});

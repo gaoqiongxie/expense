@@ -65,6 +65,7 @@ public class ExpenseServiceImpl implements ExpenseService{
 		String expenseId = paramDataEntity.GetParamStringValue("sExpense", null);
 		String payerId = paramDataEntity.GetParamStringValue("sPayer", null);
 		String typeId = paramDataEntity.GetParamStringValue("sType", null);
+		String expenseDesc = paramDataEntity.GetParamStringValue("expenseDesc", null);
 		
 		String startTime = paramDataEntity.GetParamStringValue("startTime", null);
 		String endTime = paramDataEntity.GetParamStringValue("endTime", null);
@@ -77,6 +78,7 @@ public class ExpenseServiceImpl implements ExpenseService{
 		paMap.put("typeId", typeId);
 		paMap.put("startTime", startTime);
 		paMap.put("endTime", endTime);
+		paMap.put("expenseDesc", expenseDesc);
 		
 		
 		int count = fmlExpenseDao.countExpenses(paMap);

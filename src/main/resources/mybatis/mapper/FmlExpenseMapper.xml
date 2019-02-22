@@ -97,6 +97,9 @@
 			<if test="endTime != null">
 				and d.expense_time&lt;=#{endTime}
 			</if> 
+			<if test="expenseDesc != null">
+				and d.expense_desc like CONCAT('%',#{expenseDesc},'%')
+			</if>
 		order by update_time asc 
 	</select>
 	<select id="expenseVO" resultMap="fmlExpenseVO">
@@ -121,7 +124,10 @@
 			<if test="endTime != null">
 				and d.expense_time&lt;=#{endTime}
 			</if>
-		order by expense_time desc 
+			<if test="expenseDesc != null">
+				and d.expense_desc like CONCAT('%',#{expenseDesc},'%')
+			</if>
+		order by expense_time desc , id
 		<if test="pageSize != null and pageSize != 0">
 			limit #{page},#{pageSize}
 		</if>
