@@ -5,6 +5,7 @@ public enum ErrorCodeEnum {
 	NULL_ERROR("0002","空异常"), 
 	PARAM_ERROR("0003","参数转换错误"),
 	NO_ANTHORIZATION("0004","没有权限"),
+	NULL_ANTHORIZATION("0005","token 空异常"),
 	;
 	String code;
 	String msg;

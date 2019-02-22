@@ -33,7 +33,7 @@ $(function() {
 		                   {field : 'ck',checkbox : true,align : 'center'} 
 		               ] ],
         loadFilter: function(data){
-        	return getData(data);
+	    	return getData(data);
         },
 		columns : [ [ 
 			 {field : 'expenseName',title : '支出人',width : fillsize(0.20),align : 'center'},

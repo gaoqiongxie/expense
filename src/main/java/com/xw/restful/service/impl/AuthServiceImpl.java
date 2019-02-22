@@ -39,7 +39,7 @@ public class AuthServiceImpl implements AuthService {
 	            public String load(){
 	                return TOTP.generateMyTOTP(userCode, userPassword);
 	            }
-	        }, timeout);
+	        }, 20);
 		}
 		return token;
 	}

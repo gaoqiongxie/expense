@@ -15,7 +15,7 @@ $(function(){
 		    	var reqObj = eval('('+req.responseText+")");
 		    	console.log(reqObj);
 		        //如果数据请求验证时，对应的请求资源(路径)没有权限(或者没有登录)
-		        if (reqObj && reqObj.errorCode=="0004") {
+		        if (reqObj && (reqObj.errorCode=="0004" || reqObj.errorCode=="0005")) {
 		        	$.messager.alert('提示',reqObj.msg,'warning');
 		            window.location.href = "../login.html";
 		        }
