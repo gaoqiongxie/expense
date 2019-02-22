@@ -131,7 +131,7 @@ public class ExpenseController extends BaseController{
 	 * @param response
 	 */
 	@RequestMapping(value="/expenses/export", method=RequestMethod.POST)
-	@Auth
+//	@Auth
 	public void exportList(HttpServletResponse response) {
 		initParams();
 		expenseService.exportList(this.apiRequest, response);
