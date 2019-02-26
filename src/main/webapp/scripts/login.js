@@ -39,8 +39,14 @@ function login(){
 		    success:function(data){ 
 		    	showProcess(false);
 		       var data = eval('(' + data + ')'); 
+		       console.log("login. "+data);
+		       if(data.status=='0'){
+		    	   $.messager.alert('提示',data.msg,'warning');
+		       }
 		       if(data.status=='1'){
-		    	   document.cookie = data.data;
+//		    	   document.cookie = data.data;
+		    	   
+		    	   $.cookie('tokenModel', JSON.stringify(data.data));
 		    	   window.location.href="../fml/expense.html";
 	    	   }
 		    }  

@@ -9,7 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
@@ -17,13 +19,16 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.xw.restful.constant.ErrorCodeEnum;
+import com.xw.restful.exceptions.BizException;
+import com.xw.restful.stdo.APIResult;
 import com.xw.restful.utils.HttpRequestUtils;
 import com.xw.restful.utils.NetUtils;
 
 @Aspect
 @Component
-public class ControllerLoggerAspect {
-	private static Logger logger = Logger.getLogger(ControllerLoggerAspect.class);
+public class ControllerAspect {
+	private static Logger logger = Logger.getLogger(ControllerAspect.class);
 	public long startTimeStamp;
 	public long endTimeStamp;
 	Map<String, Object> requestInfosMap = null;
@@ -48,6 +53,21 @@ public class ControllerLoggerAspect {
 		logger.info("begin-requestInfosMap:"+requestInfosMap);
 	}
 	
+	@Around("log()")
+	public Object around(ProceedingJoinPoint point) throws Throwable {
+		logger.info("异常处理");
+		// TODO 处理操作
+		Object result = null; 
+        try {
+            result = point.proceed();
+        } catch (BizException e) {
+        	return new APIResult(e.getCode(), e.getMsg());
+        }catch (Throwable e) {
+            e.printStackTrace();
+            return new APIResult(ErrorCodeEnum.SYSTEM_ERROR.getCode(), ErrorCodeEnum.SYSTEM_ERROR.getMsg());
+        }  
+		return result;
+	}
 
 	@After("log()")
 	public void doAfter() {

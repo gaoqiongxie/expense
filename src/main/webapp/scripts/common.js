@@ -1,19 +1,30 @@
 var sysUrl = parent.baseJs;
 //全局监控所有的Ajax请求，对于没有权限或登录失效的ajax访问，踢回到登录页面
 $(function(){
+	
 	$.ajaxSetup({
 		headers: { // 默认添加请求头
 		        "Author": "gaoqiongxie"
 		    },
 	    beforeSend: function(xhr) {
-	    	  xhr.setRequestHeader("accessToken", document.cookie.split(";")[0] );
+	    	
+	    	if($.cookie('tokenModel')){
+	    		var tokenModel = JSON.parse($.cookie('tokenModel'))
+		    	if(tokenModel){
+		    		var accessToken = tokenModel.userAuth.accessToken;
+		    		xhr.setRequestHeader("accessToken", accessToken);
+		    		var refreshToken = tokenModel.userAuth.refreshToken;
+		    		xhr.setRequestHeader("refreshToken", refreshToken);
+		    	}
+	    	}
+	    	
 	    },
 	    cache : false,
 	    global : true,
 	    complete: function(req, status) {
 		    try{
 		    	var reqObj = eval('('+req.responseText+")");
-		    	console.log(reqObj);
+//		    	console.log(reqObj);
 		        //如果数据请求验证时，对应的请求资源(路径)没有权限(或者没有登录)
 		        if (reqObj && (reqObj.errorCode=="0004" || reqObj.errorCode=="0005")) {
 		        	$.messager.alert('提示',reqObj.msg,'warning');

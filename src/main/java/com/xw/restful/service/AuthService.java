@@ -8,4 +8,6 @@ public interface AuthService {
 
 	Object logout(APIRequest apiRequest);
 
+	boolean validateAccessToken(String accessToken);
+
 }

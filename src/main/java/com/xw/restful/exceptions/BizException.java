@@ -1,8 +1,5 @@
 package com.xw.restful.exceptions;
 
-import com.xw.restful.constant.ErrorCodeEnum;
-
-
 /**
  * 
  * <b>Description：</b> 自定义业务异常 <br/>

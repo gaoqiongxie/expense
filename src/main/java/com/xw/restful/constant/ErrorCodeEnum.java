@@ -1,11 +1,13 @@
 package com.xw.restful.constant;
 
 public enum ErrorCodeEnum {
-	SYSTEM_ERROR("0001","系统错误"),
-	NULL_ERROR("0002","空异常"), 
-	PARAM_ERROR("0003","参数转换错误"),
-	NO_ANTHORIZATION("0004","没有权限"),
-	NULL_ANTHORIZATION("0005","token 空异常"),
+	SYSTEM_ERROR("0001", "系统错误"),
+	NULL_ERROR("0002", "空异常"), 
+	PARAM_ERROR("0003", "参数转换错误"),
+	NO_ANTHORIZATION("0004", "没有权限"),
+	NULL_ANTHORIZATION("0005", "token 空异常"),
+	ERROR_LOGIN("0006", "账户或密码错误"),
+	ERROR_USER_STATE("0007", "该用户无效")
 	;
 	String code;
 	String msg;
