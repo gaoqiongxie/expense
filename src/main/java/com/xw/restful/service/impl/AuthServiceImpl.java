@@ -14,6 +14,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.xuanyan.hmc.common.enums.auth.AuthLevelEnum;
+import com.xuanyan.hmc.midware.assist.utils.date.DateUtil;
+import com.xuanyan.hmc.midware.assist.utils.string.StringUtil;
 import com.xw.restful.constant.ConstClass;
 import com.xw.restful.constant.ErrorCodeEnum;
 import com.xw.restful.dao.FmlAuthDao;
@@ -39,11 +42,7 @@ public class AuthServiceImpl implements AuthService {
 
 	private static Logger logger = Logger.getLogger(AuthServiceImpl.class);
 
-	// private static final String uname = "gg";
-	// private static final String upwd = "3030";
-	// private static final int timeout = 30*60;//失效时间30 min
 	private static final int TOKEN_LOW = 30 * 24 * 3600; // token 失效级别 低 30天
-	// private static final int TOKEN_MAX_LOW = 10*365*24*3600;
 	private static final int TOKEN_HIGH = 30 * 60;// token 失效级别 高 30分钟
 
 	@Autowired
@@ -78,7 +77,7 @@ public class AuthServiceImpl implements AuthService {
 	private TokenModel createToken(FmlAuth userInfo) {
 		String key = userInfo.getId();
 		UserCache userCache = (UserCache) redisUtils.get(key);
-		if (null == userCache) {
+		if (null == userCache) {// 用户未登录
 			userCache = new UserCache(key);
 		}
 		userCache.setUserInfo(userInfo);
@@ -157,17 +156,39 @@ public class AuthServiceImpl implements AuthService {
 		return refreshToken;
 	}
 
+	@SuppressWarnings("unlikely-arg-type")
 	@Override
 	public Object logout(APIRequest apiRequest) {
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
 				.getRequest();
-		String token = request.getHeader("accessToken");
-		// 验证 token 是否合法
-		if (!StringUtils.isEmpty(token) && CacheUtils.containsValue(token)) {
-			//
-			CacheUtils.clearByToken(token);
+		String accessToken = request.getHeader("accessToken");
+		// TODO 清除当前accessToken
+		if (StringUtils.isEmpty(accessToken)) {
+			throw new BizException(ErrorCodeEnum.NULL_ANTHORIZATION.getCode(),
+					ErrorCodeEnum.NULL_ANTHORIZATION.getMsg());
 		}
-		CacheUtils.printf();
+		String key = AuthUtil.getUserIdByToken(accessToken);
+		UserCache userCache = (UserCache) redisUtils.get(key);
+		if (null == userCache) {// 用户未登录
+			return null;
+		}
+		List<AccessToken> accessTokens = userCache.getAccessTokens();
+		List<RefreshToken> refreshTokens = userCache.getRefreshTokens();
+		if (accessTokens != null && !accessTokens.isEmpty()) {
+			for (AccessToken at : accessTokens) {
+				long expireTime = at.getCreateTime() + (TOKEN_HIGH * 1000l);
+				long currentTime = DateUtils.getCurrentDateMilliSecond();
+				if (accessToken.equals(at.getAccessToken())) {// 删除当前accessToken
+					accessTokens.remove(at);
+				} else { // 清空失效token
+					if (expireTime < currentTime) {
+						refreshTokens.remove(at);
+					} else {
+						continue;
+					}
+				}
+			}
+		}
 		return null;
 	}
 
@@ -179,15 +200,15 @@ public class AuthServiceImpl implements AuthService {
 		}
 		String key = AuthUtil.getUserIdByToken(accessToken);
 		UserCache userCache = (UserCache) redisUtils.get(key);
-		if (null == userCache) {
+		if (null == userCache) {// 用户未登录
 			return false;
 		}
 		List<AccessToken> accessTokenList = userCache.getAccessTokens();
-		if(accessTokenList == null || accessTokenList.isEmpty()) {
+		if (accessTokenList == null || accessTokenList.isEmpty()) {
 			return false;
 		}
-		
-		boolean currentTokenFlag = false;//当前 token 是否失效
+
+		boolean currentTokenFlag = false;// 当前 token 是否失效
 		for (AccessToken at : accessTokenList) {
 			long expireTime = at.getCreateTime() + (TOKEN_HIGH * 1000l);// 剩余时间
 			long currentTime = DateUtils.getCurrentDateMilliSecond();
@@ -199,7 +220,7 @@ public class AuthServiceImpl implements AuthService {
 				} else {
 					currentTokenFlag = true;
 				}
-			} else { 
+			} else {
 				// 轮询其他token中过期的清空掉
 				if (expireTime < currentTime) {// 已失效
 					accessTokenList.remove(at);
