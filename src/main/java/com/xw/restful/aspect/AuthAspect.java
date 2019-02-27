@@ -16,7 +16,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import com.xw.restful.constant.ErrorCodeEnum;
 import com.xw.restful.service.AuthService;
 import com.xw.restful.stdo.APIResult;
-import com.xw.restful.utils.cache.CacheUtils;
 
 @Aspect
 @Component
@@ -37,10 +36,8 @@ public class AuthAspect {
     	//验证 token 是否合法
     	if(StringUtils.isEmpty(accessToken)){
     		return new APIResult(ErrorCodeEnum.NULL_ANTHORIZATION.getCode(), ErrorCodeEnum.NULL_ANTHORIZATION.getMsg());
-//    	}else if(!CacheUtils.containsValue(token)) {
-//    		return new APIResult(ErrorCodeEnum.NO_ANTHORIZATION.getCode(), ErrorCodeEnum.NO_ANTHORIZATION.getMsg());
-    	}else if(authService.validateAccessToken(accessToken)){
-    		
+    	}else if(!authService.validateAccessToken(accessToken)){
+    		return new APIResult(ErrorCodeEnum.NO_ANTHORIZATION.getCode(), ErrorCodeEnum.NO_ANTHORIZATION.getMsg());
     	}else {
     		//TODO 更新过期时间
     		

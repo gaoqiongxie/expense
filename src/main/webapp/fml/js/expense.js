@@ -33,7 +33,6 @@ $(function() {
 		                   {field : 'ck',checkbox : true,align : 'center'} 
 		               ] ],
         loadFilter: function(data){
-        	debugger;
         	var resData;
         	if(data.errorCode){
         		resData = {

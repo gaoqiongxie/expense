@@ -44,8 +44,6 @@ function login(){
 		    	   $.messager.alert('提示',data.msg,'warning');
 		       }
 		       if(data.status=='1'){
-//		    	   document.cookie = data.data;
-		    	   
 		    	   $.cookie('tokenModel', JSON.stringify(data.data));
 		    	   window.location.href="../fml/expense.html";
 	    	   }

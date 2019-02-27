@@ -26,9 +26,12 @@ $(function(){
 		    	var reqObj = eval('('+req.responseText+")");
 //		    	console.log(reqObj);
 		        //如果数据请求验证时，对应的请求资源(路径)没有权限(或者没有登录)
-		        if (reqObj && (reqObj.errorCode=="0004" || reqObj.errorCode=="0005")) {
+		        if (reqObj && !reqObj.errorCode) {
 		        	$.messager.alert('提示',reqObj.msg,'warning');
-		            return window.location.href = "../login.html";
+		        	var loginErrorCodeArr = ['0004','0005','0006','0007'];
+		        	if(loginErrorCodeArr.toString().indexOf(reqObj.errorCode)){
+		        		return window.location.href = "../login.html";
+	        		}
 		        }
 		     }catch(e){}
 	    }

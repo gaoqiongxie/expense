@@ -4,6 +4,10 @@ import java.util.Date;
 
 public class DateUtils {
 	
+	/**
+	 * 获取精确到毫秒的时间戳
+	 * @return
+	 */
 	public static long getCurrentDateMilliSecond() {
 		return System.currentTimeMillis();
 	}

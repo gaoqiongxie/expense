@@ -21,5 +21,12 @@
 		select <include refid="Base_Column_List" />  from <include refid="table" />
 		where uname=#{uname} and upwd=#{upwd} 
 	</select>
+	
+	<update id="updateLastLoginTime" parameterType="fmlAuth">
+		update fml_auth set last_login_time=now() 
+		where 
+			id=#{id}
+	
+	</update>
 
 </mapper>

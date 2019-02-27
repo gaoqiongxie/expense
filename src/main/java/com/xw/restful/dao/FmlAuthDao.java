@@ -9,4 +9,6 @@ public interface FmlAuthDao {
 
 	FmlAuth getUserByNameAndPwd(@Param("uname")String uname, @Param("upwd")String upwd);
 
+	int updateLastLoginTime(FmlAuth userInfo);
+
 }
