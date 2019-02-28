@@ -127,7 +127,7 @@
 			<if test="expenseDesc != null">
 				and d.expense_desc like CONCAT('%',#{expenseDesc},'%')
 			</if>
-		order by expense_time desc , id
+		order by expense_time desc , id desc
 		<if test="pageSize != null and pageSize != 0">
 			limit #{page},#{pageSize}
 		</if>
