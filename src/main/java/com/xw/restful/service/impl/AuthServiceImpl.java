@@ -14,9 +14,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.xuanyan.hmc.common.enums.auth.AuthLevelEnum;
-import com.xuanyan.hmc.midware.assist.utils.date.DateUtil;
-import com.xuanyan.hmc.midware.assist.utils.string.StringUtil;
 import com.xw.restful.constant.ConstClass;
 import com.xw.restful.constant.ErrorCodeEnum;
 import com.xw.restful.dao.FmlAuthDao;
@@ -32,7 +29,6 @@ import com.xw.restful.stdo.APIRequest;
 import com.xw.restful.utils.DateUtils;
 import com.xw.restful.utils.ParamDataEntity;
 import com.xw.restful.utils.auth.AuthUtil;
-import com.xw.restful.utils.cache.CacheUtils;
 import com.xw.restful.utils.redis.RedisUtils;
 import com.xw.restful.utils.rsa.MD5;
 

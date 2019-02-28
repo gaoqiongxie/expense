@@ -28,4 +28,7 @@ public class AuthController extends BaseController{
 		initParams();
 		return new APIResult(authService.logout(this.apiRequest));
 	}
+	
+	//TODO refreshToken 重新认证
+	
 }
