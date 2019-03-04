@@ -7,7 +7,8 @@ public enum ErrorCodeEnum {
 	NO_ANTHORIZATION("0004", "没有权限"),
 	NULL_ANTHORIZATION("0005", "token 空异常"),
 	ERROR_LOGIN("0006", "账户或密码错误"),
-	ERROR_USER_STATE("0007", "该用户无效")
+	ERROR_USER_STATE("0007", "该用户无效"),
+	UNLOGIN("0008", "用户未登录")
 	;
 	String code;
 	String msg;

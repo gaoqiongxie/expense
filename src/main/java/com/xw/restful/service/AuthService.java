@@ -10,4 +10,6 @@ public interface AuthService {
 
 	boolean validateAccessToken(String accessToken);
 
+	Object refresh(String refreshToken);
+
 }

@@ -30,5 +30,10 @@ public class AuthController extends BaseController{
 	}
 	
 	//TODO refreshToken 重新认证
-	
+	@RequestMapping("/refresh")
+	public APIResult refresh() {
+		initParams();
+		String refreshToken = this.getRequest().getHeader("refreshToken");
+		return new APIResult(authService.refresh(refreshToken));
+	}
 }

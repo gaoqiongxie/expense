@@ -39,7 +39,7 @@ function login(){
 		    success:function(data){ 
 		    	showProcess(false);
 		       var data = eval('(' + data + ')'); 
-		       console.log("login. "+data);
+		       console.log("login. "+JSON.stringify(data));
 		       if(data.status=='0'){
 		    	   $.messager.alert('提示',data.msg,'warning');
 		       }
