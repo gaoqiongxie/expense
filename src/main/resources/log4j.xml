@@ -4,6 +4,7 @@
     <!--输出到控制台-->
     <appender name="consoleAppender" class="org.apache.log4j.ConsoleAppender">
         <param name="Threshold" value="DEBUG"/>
+        <param name="Encoding" value="UTF-8"/>
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss, SSS} [%t] [%c] [%p] - %m%n"/>
         </layout>
@@ -12,6 +13,7 @@
  	<!--输出到文件（debug）-->
     <appender name="fileAppenderDebug" class="org.apache.log4j.DailyRollingFileAppender">
         <param name="File" value="${LOG4J_FILE_PATH}/debug/debug.log" />
+        <param name="Encoding" value="UTF-8"/>
         <param name="DatePattern" value=".yyyy-MM-dd" />
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss, SSS} [%t] [%c] [%p] - %m%n"/>
@@ -26,6 +28,7 @@
     <!--输出到文件（info）-->
     <appender name="fileAppenderInfo" class="org.apache.log4j.DailyRollingFileAppender">
         <param name="File" value="${LOG4J_FILE_PATH}/info/info.log" />
+        <param name="Encoding" value="UTF-8"/>
         <param name="DatePattern" value=".yyyy-MM-dd" />
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss, SSS} [%t] [%c] [%p] - %m%n"/>
@@ -39,6 +42,7 @@
     <!--输出到文件（error）-->
     <appender name="fileAppenderError" class="org.apache.log4j.DailyRollingFileAppender">
         <param name="File" value="${LOG4J_FILE_PATH}/error/error.log" />
+        <param name="Encoding" value="UTF-8"/>
         <param name="DatePattern" value=".yyyy-MM-dd" />
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss, SSS} [%t] [%c] [%p] - %m%n"/>
