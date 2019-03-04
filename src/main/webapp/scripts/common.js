@@ -9,7 +9,8 @@ $(function() {
 				beforeSend : function(xhr) {
 
 					if ($.cookie('tokenModel')) {
-						var tokenModel = JSON.parse($.cookie('tokenModel'))
+						var tokenModel = JSON.parse($.cookie('tokenModel'));
+//						console.log("common refresh ajaxSetup. " + JSON.stringify(tokenModel));
 						if (tokenModel) {
 							var accessToken = tokenModel.userAuth.accessToken;
 							xhr.setRequestHeader("accessToken", accessToken);
@@ -39,8 +40,8 @@ $(function() {
 					}
 				}
 			});
-
-	window.setInterval(refreshToken, 1000 * 60 * 25);
+	 
+	window.setInterval(refreshTokens, 1000*60*25);
 
 });
 
@@ -49,10 +50,11 @@ $(function() {
  * 
  * @returns
  */
-function refreshToken() {
-	console.log("refreshToken -- start");
+function refreshTokens() {
+//	console.log("refreshToken -- start");
 	if ($.cookie('tokenModel')) {
-		var tokenModel = JSON.parse($.cookie('tokenModel'))
+		var tokenModel = JSON.parse($.cookie('tokenModel'));
+//		console.log("common refresh before. " +JSON.stringify(tokenModel));
 		if (tokenModel) {
 			var refreshToken = tokenModel.userAuth.refreshToken;
 			$.ajax({
@@ -66,7 +68,7 @@ function refreshToken() {
 					}
 					if (data.status == '1') {
 						tokenModel.userAuth = data.data;
-						console.log("common refresh. " +tokenModel);
+//						console.log("common refresh end. " +JSON.stringify(tokenModel));
 						$.cookie('tokenModel', JSON.stringify(tokenModel));
 					}
 				}
