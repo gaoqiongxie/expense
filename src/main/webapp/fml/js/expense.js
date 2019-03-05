@@ -305,6 +305,7 @@ $(function() {
 				url:'/logout',
 				success:function(data){
 					//TODO 清空缓存
+					$.cookie('tokenModel', null);
 					window.location.href = "../../login.html";
 				}
 			});
