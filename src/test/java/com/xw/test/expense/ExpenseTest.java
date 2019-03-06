@@ -46,11 +46,11 @@ public class ExpenseTest extends ExpenseApplicationTests{
 		paMap.put("groupKey", "payerId");
 		List<GroupExpenseVO> listByPayer = fmlExpenseDao.groupExpenses(paMap);
 		
-		System.out.println("根据支出类别分组：");
-		System.out.println(BaseUtils.toJSONString(listByType));
-		System.out.println("根据支出人分组：");
-		System.out.println(BaseUtils.toJSONString(listByExpense));
-		System.out.println("根据支付人分组：");
-		System.out.println(BaseUtils.toJSONString(listByPayer));
+		logger.info("根据支出类别分组：");
+		logger.info(BaseUtils.toJSONString(listByType));
+		logger.info("根据支出人分组：");
+		logger.info(BaseUtils.toJSONString(listByExpense));
+		logger.info("根据支付人分组：");
+		logger.info(BaseUtils.toJSONString(listByPayer));
 	}
 }

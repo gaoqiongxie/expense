@@ -27,23 +27,23 @@ public class RedisTest extends ExpenseApplicationTests{
 //		System.out.println(redisUtils.hasKey("uname"));
 //		System.out.println(redisUtils.get("uname"));
 		
-		System.out.println(MD5.getMD5String("3030"));
+//		System.out.println(MD5.getMD5String("3030"));
 		
 		UserCache u = (UserCache) redisUtils.get("a259bd97398a11e98919fcaa14d1bc00");
 		System.out.println(BaseUtils.toJSONString(u));
 		
-		List<AccessToken> accessTokenList = u.getAccessTokens();
-		System.out.println(BaseUtils.toJSONString(accessTokenList));
-		// 根据时间倒叙 判断是否过期 
-		
-		accessTokenList.sort(Comparator.comparing(AccessToken::getCreateTime));//升序
-		System.out.println(BaseUtils.toJSONString(accessTokenList));
-		accessTokenList.sort(Comparator.comparing(AccessToken::getCreateTime).reversed());//降序
-		System.out.println(BaseUtils.toJSONString(accessTokenList));
-		Predicate<AccessToken> expiredFilter = (at) -> ((at.getCreateTime() + (30 * 60 * 1000l)) > DateUtils.getCurrentDateMilliSecond());
-		List<AccessToken> accessTokenListFilter = accessTokenList.stream().filter(expiredFilter).collect(Collectors.toList());
-		System.out.println(BaseUtils.toJSONString(accessTokenListFilter));
-		System.out.println(BaseUtils.toJSONString(accessTokenList.stream().filter(expiredFilter).collect(Collectors.toList()).size()>0));
+//		List<AccessToken> accessTokenList = u.getAccessTokens();
+//		System.out.println(BaseUtils.toJSONString(accessTokenList));
+//		// 根据时间倒叙 判断是否过期 
+//		
+//		accessTokenList.sort(Comparator.comparing(AccessToken::getCreateTime));//升序
+//		System.out.println(BaseUtils.toJSONString(accessTokenList));
+//		accessTokenList.sort(Comparator.comparing(AccessToken::getCreateTime).reversed());//降序
+//		System.out.println(BaseUtils.toJSONString(accessTokenList));
+//		Predicate<AccessToken> expiredFilter = (at) -> ((at.getCreateTime() + (30 * 60 * 1000l)) > DateUtils.getCurrentDateMilliSecond());
+//		List<AccessToken> accessTokenListFilter = accessTokenList.stream().filter(expiredFilter).collect(Collectors.toList());
+//		System.out.println(BaseUtils.toJSONString(accessTokenListFilter));
+//		System.out.println(BaseUtils.toJSONString(accessTokenList.stream().filter(expiredFilter).collect(Collectors.toList()).size()>0));
 	}
 	
 	
