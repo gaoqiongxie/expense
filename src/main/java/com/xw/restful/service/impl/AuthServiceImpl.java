@@ -3,16 +3,14 @@ package com.xw.restful.service.impl;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-
-import javax.servlet.http.HttpServletRequest;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.xw.restful.constant.ConstClass;
 import com.xw.restful.constant.ErrorCodeEnum;
@@ -26,6 +24,7 @@ import com.xw.restful.domain.auth.UserCache;
 import com.xw.restful.exceptions.BizException;
 import com.xw.restful.service.AuthService;
 import com.xw.restful.stdo.APIRequest;
+import com.xw.restful.utils.CollectionUtils;
 import com.xw.restful.utils.DateUtils;
 import com.xw.restful.utils.ParamDataEntity;
 import com.xw.restful.utils.auth.AuthUtil;
@@ -38,8 +37,10 @@ public class AuthServiceImpl implements AuthService {
 
 	private static Logger logger = Logger.getLogger(AuthServiceImpl.class);
 
-	private static final int TOKEN_LOW = 30 * 24 * 3600; // token 失效级别 低 30天
-	private static final int TOKEN_HIGH = 30 * 60;// token 失效级别 高 30分钟
+	/** token 失效级别 低 30天*/
+	private static final int TOKEN_LOW_SECOND = 30 * 24 * 3600; 
+	/** token 失效级别 高 30分钟*/
+	private static final int TOKEN_HIGH_SECOND = 30 * 60;
 
 	@Autowired
 	FmlAuthDao fmlAuthDao;
@@ -70,6 +71,11 @@ public class AuthServiceImpl implements AuthService {
 		return tokenModel;
 	}
 
+	/**
+	 * 生成 TokenModel
+	 * @param userInfo
+	 * @return
+	 */
 	private TokenModel createToken(FmlAuth userInfo) {
 		String key = userInfo.getId();
 		UserCache userCache = (UserCache) redisUtils.get(key);
@@ -78,11 +84,9 @@ public class AuthServiceImpl implements AuthService {
 		}
 		userCache.setUserInfo(userInfo);
 
-		// 设置 refreshToken
-		RefreshToken refreshToken = updateRefreshToken(userCache, key);
-
-		// 设置 accessToken
-		AccessToken accessToken = updateAccessTokem(userCache, key);
+		// 设置 token
+		RefreshToken refreshToken = getLastedRefreshToken(userCache, key);
+		AccessToken accessToken = getLastedAccessToken(userCache, key);
 
 		// 保存和更新 userCache
 		redisUtils.set(key, userCache);
@@ -93,56 +97,100 @@ public class AuthServiceImpl implements AuthService {
 		return ut;
 	}
 
-	private AccessToken updateAccessTokem(UserCache userCache, String userId) {
-		String accessTokenValue = AuthUtil.getAccessToken(userId);
-		long expireInSecend = TOKEN_HIGH;// 剩余秒数
-
-		// 当前的accessToken
-		AccessToken accessToken = new AccessToken(accessTokenValue);
-		accessToken.setExpireIn(expireInSecend);
-
+	/**
+	 * 获取最新 token
+	 * @param userCache
+	 * @param userId
+	 * @return
+	 */
+	private AccessToken getLastedAccessToken(UserCache userCache, String userId) {
 		List<AccessToken> accessTokenList = userCache.getAccessTokens();
-		if (accessTokenList != null && !accessTokenList.isEmpty()) {
-			// 清除已失效token
-			cleanAccessToken(accessTokenList, null);
-			// 新增accessToken
-			accessTokenList.add(accessToken);
-		} else {
+		if(CollectionUtils.isNullList(accessTokenList)) {
+			AccessToken accessToken = createAccessToken(userId);
 			accessTokenList = new CopyOnWriteArrayList<AccessToken>();
 			accessTokenList.add(accessToken);
+			userCache.setAccessTokens(accessTokenList);
+			return accessToken;
 		}
-		userCache.setAccessTokens(accessTokenList);
+		// 过滤过期 token
+		Predicate<AccessToken> expiredFilter = (at) -> ((at.getCreateTime() + (30 * 60 * 1000l)) > DateUtils.getCurrentDateMilliSecond());
+		List<AccessToken> accessTokenListUnExpired = accessTokenList.stream().filter(expiredFilter).collect(Collectors.toList());
+		if(CollectionUtils.isNullList(accessTokenListUnExpired)) {
+			AccessToken accessToken = createAccessToken(userId);
+			accessTokenList = new CopyOnWriteArrayList<AccessToken>();
+			accessTokenList.add(accessToken);
+			userCache.setAccessTokens(accessTokenList);
+			return accessToken;
+		}
+		
+		userCache.setAccessTokens(accessTokenListUnExpired);
+		return accessTokenListUnExpired.get(0);
+	}
+
+	/**
+	 * 生成 accessToken
+	 * @param userId
+	 * @return
+	 */
+	private AccessToken createAccessToken(String userId) {
+		String accessTokenValue = AuthUtil.getAccessToken(userId);
+		long expireInSecend = TOKEN_HIGH_SECOND;// 剩余秒数
+		AccessToken accessToken = new AccessToken(accessTokenValue);
+		accessToken.setExpireIn(expireInSecend);
+		
 		return accessToken;
 	}
 
-	private RefreshToken updateRefreshToken(UserCache userCache, String userId) {
-		String refreshTokenValue = AuthUtil.getRefreshToken(userId);
-		long expireInSecend = TOKEN_LOW;// 剩余秒数
-		// 当前的refreshToken
-		RefreshToken refreshToken = new RefreshToken(refreshTokenValue);
-		refreshToken.setExpireIn(expireInSecend);
-
+	/**
+	 * 获取最新 refreshToken
+	 * @param userCache
+	 * @param userId
+	 * @return
+	 */
+	private RefreshToken getLastedRefreshToken(UserCache userCache, String userId) {
 		List<RefreshToken> refreshTokenList = userCache.getRefreshTokens();
-		if (refreshTokenList != null && !refreshTokenList.isEmpty()) {
-			// 清除已失效token
-			cleanRefreshToken(refreshTokenList, null);
-			// 新增refreshToken
-			refreshTokenList.add(refreshToken);
-		} else {
+		if(CollectionUtils.isNullList(refreshTokenList)) {
+			RefreshToken refreshToken = createRefreshToken(userId);
 			refreshTokenList = new CopyOnWriteArrayList<RefreshToken>();
 			refreshTokenList.add(refreshToken);
+			userCache.setRefreshTokens(refreshTokenList);
+			return refreshToken;
 		}
-		userCache.setRefreshTokens(refreshTokenList);
+		// 过滤过期 token
+		Predicate<RefreshToken> expiredFilter = (at) -> ((at.getCreateTime() + (30 * 60 * 1000l)) > DateUtils.getCurrentDateMilliSecond());
+		List<RefreshToken> refreshTokenListUnExpired = refreshTokenList.stream().filter(expiredFilter).collect(Collectors.toList());
+		if(CollectionUtils.isNullList(refreshTokenListUnExpired)) {
+			RefreshToken refreshToken = createRefreshToken(userId);
+			refreshTokenList = new CopyOnWriteArrayList<RefreshToken>();
+			refreshTokenList.add(refreshToken);
+			userCache.setRefreshTokens(refreshTokenList);
+			return refreshToken;
+		}
+		
+		userCache.setRefreshTokens(refreshTokenListUnExpired);
+		return refreshTokenListUnExpired.get(0);
+	}
+
+	/**
+	 * 生成 refreshToken
+	 * @param userId
+	 * @return
+	 */
+	private RefreshToken createRefreshToken(String userId) {
+		String refreshTokenValue = AuthUtil.getRefreshToken(userId);
+		long expireInSecend = TOKEN_LOW_SECOND;// 剩余秒数
+		RefreshToken refreshToken = new RefreshToken(refreshTokenValue);
+		refreshToken.setExpireIn(expireInSecend);
+		
 		return refreshToken;
 	}
 
 	@Override
 	public Object logout(APIRequest apiRequest) {
-		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
-				.getRequest();
-		String accessToken = request.getHeader("accessToken");
-		String refreshToken = request.getHeader("refreshToken");
-		if (StringUtils.isEmpty(accessToken)||StringUtils.isEmpty(refreshToken)) {
+		ParamDataEntity paramDataEntity = new ParamDataEntity(apiRequest);
+		String accessToken = paramDataEntity.GetParamStringValue("accessToken");
+		String refreshToken = paramDataEntity.GetParamStringValue("refreshToken");
+		if (StringUtils.isEmpty(accessToken) || StringUtils.isEmpty(refreshToken)) {
 			throw new BizException(ErrorCodeEnum.NULL_ANTHORIZATION.getCode(),
 					ErrorCodeEnum.NULL_ANTHORIZATION.getMsg());
 		}
@@ -151,43 +199,59 @@ public class AuthServiceImpl implements AuthService {
 		if (null == userCache) {// 用户未登录
 			return null;
 		}
-		
+
+		//清除过期及当前 token
 		cleanAccessToken(userCache.getAccessTokens(), accessToken);
 		cleanRefreshToken(userCache.getRefreshTokens(), refreshToken);
+		
+		//TODO 更新redis中的userCache
+		redisUtils.set(key, userCache);
 		
 		return null;
 	}
 
+	/**
+	  *  清除失效 refreshToken
+	 * @param refreshTokens
+	 * @param refreshToken
+	 */
 	private void cleanRefreshToken(List<RefreshToken> refreshTokens, String refreshToken) {
-		if (refreshTokens != null && !refreshTokens.isEmpty()) {
-			for (RefreshToken rt : refreshTokens) {
-				long expireTime = rt.getCreateTime() + (TOKEN_HIGH * 1000l);
-				long currentTime = DateUtils.getCurrentDateMilliSecond();
-				if(!StringUtils.isEmpty(refreshToken) && refreshToken.equals(rt.getRefreshToken())) {
-					refreshTokens.remove(rt);
-				}
-				if (expireTime < currentTime) {
-					refreshTokens.remove(rt);
-				} else {
-					continue;
-				}
+		if (CollectionUtils.isNullList(refreshToken)) {
+			return;
+		}
+		for (RefreshToken rt : refreshTokens) {
+			long expireTime = rt.getCreateTime() + (TOKEN_LOW_SECOND * 1000l);
+			long currentTime = DateUtils.getCurrentDateMilliSecond();
+			if (!StringUtils.isEmpty(refreshToken) && refreshToken.equals(rt.getRefreshToken())) {
+				refreshTokens.remove(rt);
 			}
-		}		
+			if (expireTime < currentTime) {
+				refreshTokens.remove(rt);
+			} else {
+				continue;
+			}
+		}
 	}
 
+	/**
+	 *  清除失效 accessToken
+	 * @param accessTokens
+	 * @param accessToken
+	 */
 	private void cleanAccessToken(List<AccessToken> accessTokens, String accessToken) {
-		if (accessTokens != null && !accessTokens.isEmpty()) {
-			for (AccessToken at : accessTokens) {
-				long expireTime = at.getCreateTime() + (TOKEN_HIGH * 1000l);
-				long currentTime = DateUtils.getCurrentDateMilliSecond();
-				if(!StringUtils.isEmpty(accessToken) && accessToken.equals(at.getAccessToken())) {
-					accessTokens.remove(at);
-				}
-				if (expireTime < currentTime) {
-					accessTokens.remove(at);
-				} else {
-					continue;
-				}
+		if(CollectionUtils.isNullList(accessTokens)) {
+			return;
+		}
+		for (AccessToken at : accessTokens) {
+			long expireTime = at.getCreateTime() + (TOKEN_HIGH_SECOND * 1000l);
+			long currentTime = DateUtils.getCurrentDateMilliSecond();
+			if (!StringUtils.isEmpty(accessToken) && accessToken.equals(at.getAccessToken())) {
+				accessTokens.remove(at);
+			}
+			if (expireTime < currentTime) {
+				accessTokens.remove(at);
+			} else {
+				continue;
 			}
 		}
 	}
@@ -198,6 +262,7 @@ public class AuthServiceImpl implements AuthService {
 			throw new BizException(ErrorCodeEnum.NULL_ANTHORIZATION.getCode(),
 					ErrorCodeEnum.NULL_ANTHORIZATION.getMsg());
 		}
+		
 		return validateToken(accessToken, 0);
 	}
 
@@ -209,42 +274,53 @@ public class AuthServiceImpl implements AuthService {
 		}
 
 		if (validateToken(refreshToken, 1)) {
-			//userCache
+			// userCache
 			String key = AuthUtil.getUserIdByToken(refreshToken);
 			UserCache userCache = (UserCache) redisUtils.get(key);
-			//重置token
 
-			// 设置 refreshToken
-			RefreshToken resetRefreshToken = updateRefreshToken(userCache, key);
-
-			// 设置 accessToken
-			AccessToken resetAccessToken = updateAccessTokem(userCache, key);
+			// 设置 token
+			RefreshToken resetRefreshToken = getLastedRefreshToken(userCache, key);
+			AccessToken resetAccessToken = getLastedAccessToken(userCache, key);
 
 			// 保存和更新 userCache
 			redisUtils.set(key, userCache);
-			//保存和返回
+			
+			// 保存和返回
 			UserAuth tokenResult = new UserAuth(resetAccessToken.getAccessToken(), resetRefreshToken.getRefreshToken(),
 					resetAccessToken.getExpireIn(), resetRefreshToken.getExpireIn());
 			return tokenResult;
-		}else {
-			throw new BizException(ErrorCodeEnum.NO_ANTHORIZATION.getCode(),
-					ErrorCodeEnum.NO_ANTHORIZATION.getMsg());
+		} else {
+			throw new BizException(ErrorCodeEnum.NO_ANTHORIZATION.getCode(), ErrorCodeEnum.NO_ANTHORIZATION.getMsg());
 		}
 
 	}
 
+	/**
+	 * token 验证
+	 * @param token
+	 * @param tokenType
+	 * @return
+	 */
 	private boolean validateToken(String token, int tokenType) {
 		String key = AuthUtil.getUserIdByToken(token);
 		UserCache userCache = (UserCache) redisUtils.get(key);
 		if (null == userCache) {// 用户未登录
-//			return false;
-			throw new BizException(ErrorCodeEnum.UNLOGIN.getCode(),
-					ErrorCodeEnum.UNLOGIN.getMsg());
+			// return false;
+			throw new BizException(ErrorCodeEnum.UNLOGIN.getCode(), ErrorCodeEnum.UNLOGIN.getMsg());
 		}
 
-		return validateToken(userCache, token, tokenType);
+		boolean flag = validateToken(userCache, token, tokenType);
+		redisUtils.set(key, userCache);
+		return flag;
 	}
 
+	/**
+	 * token 验证
+	 * @param userCache
+	 * @param token
+	 * @param tokenType
+	 * @return
+	 */
 	private boolean validateToken(UserCache userCache, String token, int tokenType) {
 		switch (tokenType) {
 		case 0:
@@ -257,34 +333,28 @@ public class AuthServiceImpl implements AuthService {
 
 	}
 
+	/**
+	 * 验证 refreshToken
+	 * @param userCache
+	 * @param token
+	 * @return
+	 */
 	private boolean validateRefreshToken(UserCache userCache, String token) {
 		List<RefreshToken> refreshTokenList = userCache.getRefreshTokens();
-		if (refreshTokenList == null || refreshTokenList.isEmpty()) {
+		if (CollectionUtils.isNullList(refreshTokenList)) {
 			return false;
 		}
 
 		boolean currentTokenFlag = false;// 当前 token 是否失效
-		for (RefreshToken rt : refreshTokenList) {
-			long expireTime = rt.getCreateTime() + (TOKEN_HIGH * 1000l);// 剩余时间
-			long currentTime = DateUtils.getCurrentDateMilliSecond();
-			if (token.equals(rt.getRefreshToken())) {
-				// 验证当前token是否过期
-				if (expireTime < currentTime) {// 已失效
-					refreshTokenList.remove(rt);
-					currentTokenFlag = false;
-				} else {
-					currentTokenFlag = true;
-				}
-			} else {
-				// 轮询其他token中过期的清空掉
-				if (expireTime < currentTime) {// 已失效
-					refreshTokenList.remove(rt);
-				} else {
-					continue;
-				}
-			}
-		}
-
+		// 过滤器 当前token 未过期
+		Predicate<RefreshToken> expiredFilter = (rt) -> (token.equals(rt.getRefreshToken())
+				&& (rt.getCreateTime() + (TOKEN_LOW_SECOND * 1000l)) > DateUtils.getCurrentDateMilliSecond());
+		currentTokenFlag = refreshTokenList.stream().filter(expiredFilter).collect(Collectors.toList()).size() > 0;
+		
+		cleanRefreshToken(refreshTokenList, null);
+		
+		userCache.setRefreshTokens(refreshTokenList);
+		
 		if (currentTokenFlag) {
 			return true;
 		}
@@ -292,34 +362,26 @@ public class AuthServiceImpl implements AuthService {
 		return false;
 	}
 
+	/**
+	 * 验证 accessToken
+	 * @param userCache
+	 * @param token
+	 * @return
+	 */
 	private boolean validateAccessToken(UserCache userCache, String token) {
 		List<AccessToken> accessTokenList = userCache.getAccessTokens();
-		if (accessTokenList == null || accessTokenList.isEmpty()) {
+		if (CollectionUtils.isNullList(accessTokenList)) {
 			return false;
 		}
-
 		boolean currentTokenFlag = false;// 当前 token 是否失效
-		for (AccessToken at : accessTokenList) {
-			long expireTime = at.getCreateTime() + (TOKEN_HIGH * 1000l);// 剩余时间
-			long currentTime = DateUtils.getCurrentDateMilliSecond();
-			if (token.equals(at.getAccessToken())) {
-				// 验证当前token是否过期
-				if (expireTime < currentTime) {// 已失效
-					accessTokenList.remove(at);
-					currentTokenFlag = false;
-				} else {
-					currentTokenFlag = true;
-				}
-			} else {
-				// 轮询其他token中过期的清空掉
-				if (expireTime < currentTime) {// 已失效
-					accessTokenList.remove(at);
-				} else {
-					continue;
-				}
-			}
-		}
-
+		Predicate<AccessToken> expiredFilter = (at) -> (token.equals(at.getAccessToken())
+				&& (at.getCreateTime() + (TOKEN_HIGH_SECOND * 1000l)) > DateUtils.getCurrentDateMilliSecond());
+		currentTokenFlag = accessTokenList.stream().filter(expiredFilter).collect(Collectors.toList()).size() > 0;
+		
+		cleanAccessToken(accessTokenList, null);
+		
+		userCache.setAccessTokens(accessTokenList);
+		
 		if (currentTokenFlag) {
 			return true;
 		}

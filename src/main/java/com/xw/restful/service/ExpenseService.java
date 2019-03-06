@@ -69,8 +69,6 @@ public interface ExpenseService {
 	 */
 	List<GroupExpenseVO> groupExpenses(APIRequest apiRequest);
 
-	List<Object> treeExpenses(APIRequest apiRequest);
-
 	int addMember(APIRequest apiRequest);
 
 	int addType(APIRequest apiRequest);

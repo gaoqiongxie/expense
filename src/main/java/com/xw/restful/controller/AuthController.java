@@ -1,5 +1,8 @@
 package com.xw.restful.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +29,12 @@ public class AuthController extends BaseController{
 	@RequestMapping("/logout")
 	public APIResult logout() {
 		initParams();
+		String accessToken = this.getRequest().getHeader("accessToken");
+		String refreshToken = this.getRequest().getHeader("refreshToken");
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("accessToken", accessToken);
+		map.put("refreshToken", refreshToken);
+		this.apiRequest.setDataMap(map);
 		return new APIResult(authService.logout(this.apiRequest));
 	}
 	

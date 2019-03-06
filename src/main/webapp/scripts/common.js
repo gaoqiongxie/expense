@@ -51,7 +51,7 @@ $(function() {
  * @returns
  */
 function refreshTokens() {
-//	console.log("refreshToken -- start");
+	console.log("refreshToken -- start time:"+ new Date());
 	if ($.cookie('tokenModel')) {
 		var tokenModel = JSON.parse($.cookie('tokenModel'));
 //		console.log("common refresh before. " +JSON.stringify(tokenModel));

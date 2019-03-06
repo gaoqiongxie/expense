@@ -137,14 +137,4 @@ public class ExpenseController extends BaseController{
 		expenseService.exportList(this.apiRequest, response);
 	}
 	
-	/**
-	 * 3.6 支出分类
-	 * @return
-	 */
-	@RequestMapping(value="/expenses/tree", method=RequestMethod.GET)
-	@Auth
-	public APIResult treeExpenses() {
-		initParams();
-		return new APIResult(expenseService.treeExpenses(this.apiRequest));
-	}
 }

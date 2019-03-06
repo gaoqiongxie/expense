@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -24,12 +23,10 @@ import com.xw.restful.domain.FmlExpense;
 import com.xw.restful.domain.FmlMember;
 import com.xw.restful.domain.vo.ExpenseVO;
 import com.xw.restful.domain.vo.GroupExpenseVO;
-import com.xw.restful.domain.vo.MonthExpense;
 import com.xw.restful.domain.vo.Page;
 import com.xw.restful.service.ExpenseService;
 import com.xw.restful.stdo.APIRequest;
 import com.xw.restful.utils.BaseUtils;
-import com.xw.restful.utils.ListUtils;
 import com.xw.restful.utils.ParamDataEntity;
 import com.xw.restful.utils.excel.WriteExcelUtils;
 
@@ -186,18 +183,6 @@ public class ExpenseServiceImpl implements ExpenseService{
 		return expenses;
 	}
 
-	@Override
-	public List<Object> treeExpenses(APIRequest apiRequest) {
-		List<MonthExpense> list = fmlExpenseDao.monthExpense();
-
-		// 多字段分组
-		Map<String, Map<String, Map<String, Map<String, List<MonthExpense>>>>> groupBy = list.stream().collect(
-				Collectors.groupingBy(MonthExpense::getMonth, Collectors.groupingBy(MonthExpense::getPayer, Collectors
-						.groupingBy(MonthExpense::getExpenseName, Collectors.groupingBy(MonthExpense::getTypeName)))));
-		
-		List relist = ListUtils.mapToList(groupBy);
-		return relist;
-	}
 
 	@Override
 	public int addMember(APIRequest apiRequest) {
