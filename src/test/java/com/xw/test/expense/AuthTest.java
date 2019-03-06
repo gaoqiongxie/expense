@@ -30,7 +30,7 @@ public class AuthTest extends ExpenseApplicationTests{
 	
 	@Test
 	public void validateAccessTokenTest() {
-		String accessToken = "";
+		String accessToken = "YTI1OWJkOTczOThhMTFlOTg5MTlmY2FhMTRkMWJjMDAjQVQjWEBrME4pa2c_";
 		o = authService.validateAccessToken(accessToken);
 	}
 	

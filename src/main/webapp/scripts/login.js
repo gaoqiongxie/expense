@@ -44,7 +44,7 @@ function login(){
 		    	   $.messager.alert('提示',data.msg,'warning');
 		       }
 		       if(data.status=='1'){
-		    	   $.cookie('tokenModel', JSON.stringify(data.data));
+		    	   $.cookie('tokenModel', JSON.stringify(data.data), { expires: 7, path: '/' });
 		    	   window.location.href="../fml/expense.html";
 	    	   }
 		    }  

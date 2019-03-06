@@ -113,7 +113,7 @@ public class AuthServiceImpl implements AuthService {
 			return accessToken;
 		}
 		// 过滤过期 token
-		Predicate<AccessToken> expiredFilter = (at) -> ((at.getCreateTime() + (30 * 60 * 1000l)) > DateUtils.getCurrentDateMilliSecond());
+		Predicate<AccessToken> expiredFilter = (at) -> ((at.getCreateTime() + (TOKEN_HIGH_SECOND * 1000l)) > DateUtils.getCurrentDateMilliSecond());
 		List<AccessToken> accessTokenListUnExpired = accessTokenList.stream().filter(expiredFilter).collect(Collectors.toList());
 		if(CollectionUtils.isNullList(accessTokenListUnExpired)) {
 			AccessToken accessToken = createAccessToken(userId);
@@ -157,7 +157,7 @@ public class AuthServiceImpl implements AuthService {
 			return refreshToken;
 		}
 		// 过滤过期 token
-		Predicate<RefreshToken> expiredFilter = (at) -> ((at.getCreateTime() + (30 * 60 * 1000l)) > DateUtils.getCurrentDateMilliSecond());
+		Predicate<RefreshToken> expiredFilter = (at) -> ((at.getCreateTime() + (TOKEN_LOW_SECOND * 1000l)) > DateUtils.getCurrentDateMilliSecond());
 		List<RefreshToken> refreshTokenListUnExpired = refreshTokenList.stream().filter(expiredFilter).collect(Collectors.toList());
 		if(CollectionUtils.isNullList(refreshTokenListUnExpired)) {
 			RefreshToken refreshToken = createRefreshToken(userId);

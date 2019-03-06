@@ -32,8 +32,8 @@ public class RedisTest extends ExpenseApplicationTests{
 		UserCache u = (UserCache) redisUtils.get("a259bd97398a11e98919fcaa14d1bc00");
 		System.out.println(BaseUtils.toJSONString(u));
 		
-//		List<AccessToken> accessTokenList = u.getAccessTokens();
-//		System.out.println(BaseUtils.toJSONString(accessTokenList));
+		List<AccessToken> accessTokenList = u.getAccessTokens();
+		System.out.println(BaseUtils.toJSONString(accessTokenList));
 //		// 根据时间倒叙 判断是否过期 
 //		
 //		accessTokenList.sort(Comparator.comparing(AccessToken::getCreateTime));//升序
@@ -44,6 +44,22 @@ public class RedisTest extends ExpenseApplicationTests{
 //		List<AccessToken> accessTokenListFilter = accessTokenList.stream().filter(expiredFilter).collect(Collectors.toList());
 //		System.out.println(BaseUtils.toJSONString(accessTokenListFilter));
 //		System.out.println(BaseUtils.toJSONString(accessTokenList.stream().filter(expiredFilter).collect(Collectors.toList()).size()>0));
+		
+		Predicate<AccessToken> expiredFilter = (
+				at) -> (/*
+						 * "YTI1OWJkOTczOThhMTFlOTg5MTlmY2FhMTRkMWJjMDAjQVQjSCMzaFNPUGw_".equals(at.
+						 * getAccessToken()) &&
+						 */(at.getCreateTime() + (1800 * 1000l)) > DateUtils.getCurrentDateMilliSecond());
+		accessTokenList.forEach((at)->{
+			System.out.println("YTI1OWJkOTczOThhMTFlOTg5MTlmY2FhMTRkMWJjMDAjQVQjWEBrME4pa2c_");
+			System.out.println(at.getAccessToken());
+			System.out.println(at.getCreateTime() + (1800 * 1000l));
+			System.out.println(DateUtils.getCurrentDateMilliSecond());
+			System.out.println(at.getCreateTime() + (1800 * 1000l) > DateUtils.getCurrentDateMilliSecond());
+		});
+		List<AccessToken> accessTokenListFilter = accessTokenList.stream().filter(expiredFilter).collect(Collectors.toList());
+		
+		System.out.println(BaseUtils.toJSONString(accessTokenListFilter));
 	}
 	
 	

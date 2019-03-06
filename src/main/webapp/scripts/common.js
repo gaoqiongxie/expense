@@ -7,7 +7,7 @@ $(function() {
 					"Author" : "gaoqiongxie"
 				},
 				beforeSend : function(xhr) {
-
+					debugger;
 					if ($.cookie('tokenModel')) {
 						var tokenModel = JSON.parse($.cookie('tokenModel'));
 //						console.log("common refresh ajaxSetup. " + JSON.stringify(tokenModel));
@@ -54,7 +54,6 @@ function refreshTokens() {
 	console.log("refreshToken -- start time:"+ new Date());
 	if ($.cookie('tokenModel')) {
 		var tokenModel = JSON.parse($.cookie('tokenModel'));
-//		console.log("common refresh before. " +JSON.stringify(tokenModel));
 		if (tokenModel) {
 			var refreshToken = tokenModel.userAuth.refreshToken;
 			$.ajax({
@@ -68,8 +67,7 @@ function refreshTokens() {
 					}
 					if (data.status == '1') {
 						tokenModel.userAuth = data.data;
-//						console.log("common refresh end. " +JSON.stringify(tokenModel));
-						$.cookie('tokenModel', JSON.stringify(tokenModel));
+						 $.cookie('tokenModel', JSON.stringify(data.data), { expires: 7, path: '/' });
 					}
 				}
 			});
