@@ -27,7 +27,7 @@ public class AuthController extends BaseController{
 	
 	
 	@RequestMapping("/logout")
-	public APIResult logout() {
+	public void logout() {
 		initParams();
 		String accessToken = this.getRequest().getHeader("accessToken");
 		String refreshToken = this.getRequest().getHeader("refreshToken");
@@ -35,7 +35,7 @@ public class AuthController extends BaseController{
 		map.put("accessToken", accessToken);
 		map.put("refreshToken", refreshToken);
 		this.apiRequest.setDataMap(map);
-		return new APIResult(authService.logout(this.apiRequest));
+		authService.logout(this.apiRequest);
 	}
 	
 	//TODO refreshToken 重新认证

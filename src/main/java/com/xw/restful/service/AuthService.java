@@ -1,15 +1,17 @@
 package com.xw.restful.service;
 
+import com.xw.restful.domain.auth.TokenModel;
+import com.xw.restful.domain.auth.UserAuth;
 import com.xw.restful.stdo.APIRequest;
 
 public interface AuthService {
 
-	Object login(APIRequest apiRequest);
+	TokenModel login(APIRequest apiRequest);
 
-	Object logout(APIRequest apiRequest);
+	void logout(APIRequest apiRequest);
 
 	boolean validateAccessToken(String accessToken);
 
-	Object refresh(String refreshToken);
+	UserAuth refresh(String refreshToken);
 
 }

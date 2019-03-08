@@ -48,7 +48,7 @@ public class AuthServiceImpl implements AuthService {
 	RedisUtils redisUtils;
 
 	@Override
-	public Object login(APIRequest apiRequest) {
+	public TokenModel login(APIRequest apiRequest) {
 		logger.info("登录验证");
 		ParamDataEntity paramDataEntity = new ParamDataEntity(apiRequest);
 		String userCode = paramDataEntity.GetParamStringValue("userCode");
@@ -186,7 +186,7 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	@Override
-	public Object logout(APIRequest apiRequest) {
+	public void logout(APIRequest apiRequest) {
 		ParamDataEntity paramDataEntity = new ParamDataEntity(apiRequest);
 		String accessToken = paramDataEntity.GetParamStringValue("accessToken");
 		String refreshToken = paramDataEntity.GetParamStringValue("refreshToken");
@@ -197,7 +197,7 @@ public class AuthServiceImpl implements AuthService {
 		String key = AuthUtil.getUserIdByToken(accessToken);
 		UserCache userCache = (UserCache) redisUtils.get(key);
 		if (null == userCache) {// 用户未登录
-			return null;
+			return;
 		}
 
 		//清除过期及当前 token
@@ -207,7 +207,6 @@ public class AuthServiceImpl implements AuthService {
 		//TODO 更新redis中的userCache
 		redisUtils.set(key, userCache);
 		
-		return null;
 	}
 
 	/**
@@ -267,7 +266,7 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	@Override
-	public Object refresh(String refreshToken) {
+	public UserAuth refresh(String refreshToken) {
 		if (StringUtils.isEmpty(refreshToken)) {
 			throw new BizException(ErrorCodeEnum.NULL_ANTHORIZATION.getCode(),
 					ErrorCodeEnum.NULL_ANTHORIZATION.getMsg());
